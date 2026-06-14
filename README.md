@@ -264,13 +264,6 @@ Contributions are welcome.
 4. Push to GitHub
 5. Open a Pull Request
 
----
-
-## 📜 License
-
-MIT License
-
----
 
 ## 👨‍💻 Author
 
