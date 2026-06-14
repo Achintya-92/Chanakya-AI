@@ -10,7 +10,7 @@ export default async function SystemGenerator({
       currentState,
       availableTime,}){
 
-const apiKey = process.env.VITE_OPENROUTER_API_KEY;
+const apiKey = process.env.OPENROUTER_API_KEY;
     try{
  const res =await fetch(`https://openrouter.ai/api/v1/chat/completions`,
         {
