@@ -3,7 +3,7 @@ import Todo from "../models/Todo.js";
 import Roadmap from "../models/Roadmap.js";
 import System from "../models/System.js";
 import AIContent from "../models/AIContent.js";
-import generateGoalHash from "../utils/generateGoalHash.js";
+import generateGoalHash from "../utils/GenerateGoalHash.js";
 import RoadmapGenerator from "../services/roadmapGenerator.js";
 import TodoGenerator from "../services/todoGenerator.js";
 import systemGenerator from "../services/systemGenerator.js";
