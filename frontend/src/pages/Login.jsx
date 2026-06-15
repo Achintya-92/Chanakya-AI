@@ -24,23 +24,6 @@ function Login() {
 
         const token = localStorage.getItem("token");
         console.log(token);
-//         const response2 = await fetch(
-//           "http://localhost:5000/api/users/me",
-//           {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           },
-//         );
-        
-//     const data2 = await response2.json();
-//     console.log(response2);
-// console.log(data2.hasGoal);
-//         if (data2.hasGoal) {
-//           navigate(`/dashboard/${data.user.id}`);
-//         } else {
-//           
-//         }
 navigate(`/creategoal/${data.user.id}`);
       } else {
         setMessage(`❌ ${data.message}`);
