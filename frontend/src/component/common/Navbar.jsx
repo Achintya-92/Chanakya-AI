@@ -1,7 +1,7 @@
 function Navbar() {
     return ( 
       <nav>
-      <h1 className="text-indigo-600 p-4 rounded-br-lg" >Lakshya App</h1>
+      <h1 className="text-indigo-600 p-4 rounded-br-lg" >Chanakya AI</h1>
        <ul>
         <li><a href="/login">Dashboard</a></li>
         <li><a href="/about">About</a></li>

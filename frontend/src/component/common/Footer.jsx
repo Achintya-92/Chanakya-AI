@@ -8,7 +8,7 @@ export default function Footer() {
 
           <div>
             <h3 className="text-2xl font-bold text-indigo-400">
-              Lakshya AI
+              Chanakya AI
             </h3>
 
             <p className="mt-4 text-slate-400">
@@ -36,7 +36,7 @@ export default function Footer() {
             </h4>
 
             <ul className="space-y-2 text-slate-400">
-              <li>support@lakshya.ai</li>
+              <li>support@chanakya.ai</li>
               <li>India</li>
             </ul>
           </div>
@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-slate-800 mt-10 pt-6 text-center text-slate-500">
-          © 2026 Lakshya AI. All Rights Reserved.
+          © 2026 Chanakya AI. All Rights Reserved.
         </div>
 
       </div>

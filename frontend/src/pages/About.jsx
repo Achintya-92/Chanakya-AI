@@ -12,7 +12,7 @@ export default function About() {
         <section className="max-w-6xl mx-auto px-6 py-20 text-center">
 
           <span className="px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-medium">
-            About Lakshya AI
+            About Chanakya AI
           </span>
 
           <h1 className="mt-6 text-5xl font-bold text-slate-900">
@@ -21,7 +21,7 @@ export default function About() {
           </h1>
 
           <p className="mt-6 text-xl text-slate-600 max-w-3xl mx-auto">
-            Lakshya AI is an intelligent goal management platform
+            Chanakya AI is an intelligent goal management platform
             that transforms ambitions into structured roadmaps,
             daily systems, and practical actions.
           </p>
@@ -62,7 +62,7 @@ export default function About() {
             </h2>
 
             <p className="mt-5 leading-8 text-indigo-100">
-              Lakshya AI combines artificial intelligence,
+              Chanakya AI combines artificial intelligence,
               goal planning, and productivity systems to create
               a personalized success framework for every user.
             </p>

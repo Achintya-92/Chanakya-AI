@@ -6,7 +6,7 @@ import GoalForm from "../component/Goal/GoalForm";
 import GoalSection from "../component/Goal/GoalSection";
 
 function CreateGoal() {
-     const { id } = useParams();
+     const {id} = useParams();
      const [goals, setGoals] = useState([]);
   const [roadmap, setRoadmap] = useState("");
      

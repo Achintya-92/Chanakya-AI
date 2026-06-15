@@ -7,7 +7,7 @@ export default function StatCard({
       <p className="text-sm opacity-80">
         {title}
       </p>
-
+      
       <h3 className="text-2xl font-bold mt-1">
         {value}
       </h3>

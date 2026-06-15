@@ -13,7 +13,7 @@ const chatSchema = new mongoose.Schema(
       ref: "Goal",
       required: true,
     },
-
+    
     messages: [
       {
         role: {

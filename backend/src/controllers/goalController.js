@@ -77,45 +77,6 @@ export const createGoal = async (req, res) => {
       });
     }
 
-    // -------------------------
-    // GENERATE NEW AI CONTENT
-    // -------------------------
-
-    await Promise.all([
-      TodoGenerator({
-        userId,
-        goalId,
-        title,
-        goalType,
-        description,
-        age,
-        currentState,
-        availableTime,
-      }),
-
-      RoadmapGenerator({
-        userId,
-        goalId,
-        title,
-        goalType,
-        description,
-        age,
-        currentState,
-        availableTime,
-      }),
-
-      systemGenerator({
-        userId,
-        goalId,
-        title,
-        goalType,
-        description,
-        age,
-        currentState,
-        availableTime,
-      }),
-    ]);
-
     return res.status(201).json({
       success: true,
       cached: false,

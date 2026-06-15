@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-// system4656abcd<-password
+
 const systemSchema = new mongoose.Schema(
   {
     userId: {

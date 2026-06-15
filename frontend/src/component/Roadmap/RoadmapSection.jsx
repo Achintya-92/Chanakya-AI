@@ -3,13 +3,13 @@ import RoadmapList from "./RoadmapList";
 import { API_URL } from "../../config/api";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ChatBox from "../common/ChatBox";
 
 export default function RoadmapSection()
  {
    const { id } = useParams();
   const [roadmap,setRoadmap] = useState(null);
   const token = localStorage.getItem("token");
-
 
    const fetchRoadmap = async () => {
     try {
@@ -218,7 +218,7 @@ if (!roadmap) {
 
         <div className="space-y-4">
           {roadmap.milestones.map((m, index) => (
-            <div
+            <div 
               key={index}
               className="border-l-4 border-indigo-500 pl-4"
             >
@@ -275,7 +275,7 @@ if (!roadmap) {
       <RoadmapList title={"Success Metrics"} items={roadmap.successMetrics} />
 
       </section>
-
+       <ChatBox data={roadmap} id={id}/>
     </div>
   );
 }
