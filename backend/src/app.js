@@ -8,7 +8,16 @@ import userRoutes from "./routes/userRoutes.js";
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://chanakya-ai-10.vercel.app"
+    ],
+    credentials: true
+  })
+);
+
 app.use(express.json());
 
 // Test Route
