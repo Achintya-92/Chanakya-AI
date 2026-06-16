@@ -2,8 +2,7 @@ import express from "express";
 
 import {
   createGoal,
-  getGoals,
-  getGoalById,
+  getGoalByUserId,
   deleteGoal,
   getTodoById,
 getRoadmapById,
@@ -19,11 +18,9 @@ router.get("/todo/:id",protect, getTodoById);
 router.get("/roadmap/:id",protect,getRoadmapById);
 router.get("/system/:id",protect, getSystemById);
 
-router.get("/:id",protect, getGoalById);
-
 router.delete("/:id", protect, deleteGoal);
 
-router.get("/",protect, getGoals);
+router.get("/",protect, getGoalByUserId);
 
 router.post("/", protect, createGoal);
 

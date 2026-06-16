@@ -7,6 +7,7 @@ import generateGoalHash from "../utils/GenerateGoalHash.js";
 import RoadmapGenerator from "../services/roadmapGenerator.js";
 import TodoGenerator from "../services/todoGenerator.js";
 import systemGenerator from "../services/systemGenerator.js";
+import SystemGenerator from "../services/systemGenerator.js";
 
 
 export const createGoal = async (req, res) => {
@@ -95,42 +96,13 @@ export const createGoal = async (req, res) => {
 };
 
 // Get All Goals of Logged-in User
-export const getGoals = async (
-  req,
-  res
-) => {
-  console.log(req.header);
-  try {
-    const goals = await Goal.find({
-
-    }).sort({
-      createdAt: -1,
-    });
-
-    res.status(200).json({
-      success: true,
-      count: goals.length,
-      goals,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// Get Single Goal
-export const getGoalById = async (
+export const getGoalByUserId = async (
   req,
   res
 ) => {
   try {
     const goal =
-      await Goal.findById(
-        req.params.id
-      );
+      await Goal.find({userId:req.user._id});
 
     if (!goal) {
       return res.status(404).json({
@@ -176,7 +148,33 @@ export const getTodoById = async (
   res
 ) => {
   try {
-    const todos =
+     const goal =
+      await Goal.findById(
+        req.params.id
+      );
+ 
+    if(!goal){
+      console.log(req.params.id);
+      res.send("goal is not Found!");
+    };
+
+      const response = await TodoGenerator(`${
+        goal.title,
+        goal.goalType,
+        goal.description,
+        goal.age,
+        goal.currentState,
+        goal.availableTime
+      }`)
+        
+      if(!response.ok){
+        response.send({
+        success: false,
+        message:"Check your Iternet Connection!"
+      });
+      }
+
+     const todos =
       await Todo.find(
          {
           goalId:req.params.id,
@@ -221,6 +219,32 @@ export const getRoadmapById = async (
 ) => {
 
   try {
+          const goal =
+      await Goal.findById(
+        req.params.id
+      );
+ 
+    if(!goal){
+      console.log(req.params.id);
+      res.send("goal is not Found!");
+    };
+
+      const response = await RoadmapGenerator(`${
+        goal.title,
+        goal.goalType,
+        goal.description,
+        goal.age,
+        goal.currentState,
+        goal.availableTime
+      }`)
+        
+      if(!response.ok){
+        response.send({
+        success: false,
+        message:"Check your Iternet Connection!"
+      });
+      }
+
     const roadmap =
       await Roadmap.find(
          {goalId:req.params.id}
@@ -235,7 +259,6 @@ export const getRoadmapById = async (
     }
 
     // Ownership Check
-
     if (
       roadmap[0].userId.toString() !==
       req.user._id.toString()
@@ -265,6 +288,34 @@ export const getSystemById = async (
   res
 ) => {
   try {
+      const goal =
+      await Goal.find(
+         {goalId:req.params.id}
+      );
+ 
+      console.log("Goal:",goal);
+
+    if(!goal){
+      console.log(req.params.id);
+      res.send("goal is not Found!");
+    };
+
+      const response = await SystemGenerator(`${
+        goal.title,
+        goal.goalType,
+        goal.description,
+        goal.age,
+        goal.currentState,
+        goal.availableTime
+      }`)
+    
+      if(!response.ok){
+        response.send({
+        success: false,
+        message:"Check your Iternet Connection!"
+      });
+      }
+
     const system =
       await System.find(
        {goalId:req.params.id}

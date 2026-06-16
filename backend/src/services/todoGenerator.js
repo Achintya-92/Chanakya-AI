@@ -8,7 +8,7 @@ export default async function TodoGenerator({
       description,
       age,
       currentState,
-      availableTime,}){
+      availableTime}){
 
 const apiKey = process.env.OPENROUTER_API_KEY;
     try{
