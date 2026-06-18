@@ -1,7 +1,9 @@
 import {useNavigate} from "react-router-dom";
+import { API_URL } from "../../config/api";
 
 function GoalCard({goal}) {
   const navigate = useNavigate();
+            
     return ( 
         <div className="
  bg-white

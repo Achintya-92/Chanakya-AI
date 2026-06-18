@@ -50,7 +50,7 @@ export default function Home() {
             </h1>
 
             <p className="mt-6 text-xl text-slate-600 max-w-3xl mx-auto">
-              Lakshya AI helps you transform your dreams into
+              Chanakya AI helps you transform your dreams into
               structured roadmaps, daily systems, and actionable
               plans powered by Artificial Intelligence.
             </p>
@@ -62,7 +62,7 @@ export default function Home() {
       Get Started
     </button>
 
-              <button className="px-8 py-4 border border-slate-300 rounded-xl font-semibold hover:bg-slate-100 transition">
+              <button onClick={() => navigate("/about")} className="px-8 py-4 border border-slate-300 rounded-xl font-semibold hover:bg-slate-100 transition">
                 Learn More
               </button>
             </div>
@@ -75,7 +75,7 @@ export default function Home() {
 
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-slate-900">
-              What Lakshya AI Does
+              What Chanakya AI Does
             </h2>
 
             <p className="text-slate-600 mt-4">
@@ -114,7 +114,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-6">
 
             <h2 className="text-center text-4xl font-bold mb-12">
-              Why Choose Lakshya AI?
+              Why Choose Chanakya AI?
             </h2>
 
             <div className="grid md:grid-cols-2 gap-10">

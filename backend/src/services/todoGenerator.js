@@ -20,6 +20,9 @@ const apiKey = process.env.OPENROUTER_API_KEY;
             Authorization:`Bearer ${apiKey.trim()}`,
             "Content-Type": "application/json"
         },
+        response_format: {
+  type: "json_object"
+},
         body: JSON.stringify({
         model: "openrouter/free",
 
@@ -200,15 +203,23 @@ Return ONLY valid JSON matching the schema exactly.
      })
 
 const data = await res.json();
-console.log(data);
-const content = data.choices?.[0]?.message?.content;
-   console.log(content);
-try {
+ if(!data){
+    res.send("Chek Internet Connectivity")
+   }
 
+const content = data.choices?.[0]?.message?.content;
+
+const cleaned = content
+  .replace(/```json|```/g, "")
+  .trim();
+
+const parsed = JSON.parse(cleaned);
+
+try {
   await Todo.create({
     userId,
     goalId,
-    todo:content
+    todo:parsed
   });
 
 } catch (err) {

@@ -1,28 +1,26 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../config/api";
-import Navbar from "../component/common/Navbar";
+import Navbar from "../component/common/InternalNavbar";
 import GoalForm from "../component/Goal/GoalForm";
 import GoalSection from "../component/Goal/GoalSection";
+import ChatBox from "../component/common/ChatBox";
 
 function CreateGoal() {
-     const {id} = useParams();
-     const [goals, setGoals] = useState([]);
-  const [roadmap, setRoadmap] = useState("");
+  const {id} = useParams();
+  const [goals, setGoals] = useState([]);
      
   useEffect(() => {
     const token = localStorage.getItem("token");
-
-    fetch(`${API_URL}/goals/`, {
+    fetch(`${API_URL}/goals/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
-      .then((data) => setGoals(data.goals))
+      .then((data) => setGoals(data.goal))
       .catch((err) => console.error(err));
   }, []);
-
 
 if(goals){
 
@@ -49,7 +47,7 @@ const yearlyGoals = goals.filter(
 
   <>
 
-    <Navbar />
+    <Navbar userId={id}/>
 
     <GoalForm/>
 
@@ -77,6 +75,7 @@ const yearlyGoals = goals.filter(
       title="Life time Goals"
       goals={lifetimeGoals}
     />
+    <ChatBox/>
   </>
 );
 }
@@ -90,6 +89,7 @@ else{
 <br />
 <br />
 <h2>Create goals still there No goal Exist!</h2>
+    <ChatBox data={roadmap} id={id}/>
   </>
 );
 }

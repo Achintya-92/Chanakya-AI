@@ -210,15 +210,23 @@ Do not return code fences.
      })
 
 const data = await res.json();
-console.log(data);
-const content = data.choices?.[0]?.message?.content;
-   console.log(content);
-try {
+ if(!data){
+    res.send("Chek Internet Connectivity")
+   }
 
+const content = data.choices?.[0]?.message?.content;
+
+const cleaned = content
+  .replace(/```json|```/g, "")
+  .trim();
+
+const parsed = JSON.parse(cleaned);
+
+try {
 await Roadmap.create({
   userId,
   goalId,
-  roadmap: content,
+  roadmap:parsed
 });
 
 } catch (err) {

@@ -11,28 +11,12 @@ const chatSchema = new mongoose.Schema(
     goalId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Goal",
-      required: true,
+      default:null
     },
-    
-    messages: [
-      {
-        role: {
-          type: String,
-          enum: ["user", "assistant"],
-          required: true,
-        },
-
-        content: {
-          type: String,
-          required: true,
-        },
-
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
+    chat: {
+          type: mongoose.Schema.Types.Mixed,
+          required:true,
+        }
   },
   {
     timestamps: true,

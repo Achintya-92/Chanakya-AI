@@ -101,9 +101,9 @@ export const getGoalByUserId = async (
   res
 ) => {
   try {
+    
     const goal =
-      await Goal.find({userId:req.user._id});
-
+      await Goal.find({userId:req.params.id});
     if (!goal) {
       return res.status(404).json({
         success: false,
@@ -112,17 +112,6 @@ export const getGoalByUserId = async (
       });
     }
 
-    // Ownership Check 
-    if (
-      goal.userId.toString() !==
-      req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message:
-          "Access denied",
-      });
-    }
 
     const aiContent =
       await AIContent.findOne({
@@ -152,27 +141,10 @@ export const getTodoById = async (
       await Goal.findById(
         req.params.id
       );
- 
     if(!goal){
       console.log(req.params.id);
       res.send("goal is not Found!");
     };
-
-      const response = await TodoGenerator(`${
-        goal.title,
-        goal.goalType,
-        goal.description,
-        goal.age,
-        goal.currentState,
-        goal.availableTime
-      }`)
-        
-      if(!response.ok){
-        response.send({
-        success: false,
-        message:"Check your Iternet Connection!"
-      });
-      }
 
      const todos =
       await Todo.find(
@@ -180,17 +152,9 @@ export const getTodoById = async (
           goalId:req.params.id,
         }
       );
-
-    if (!todos) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Todo not found",
-      });
-    }
-    // Ownership Check 
-    if (
-      todos[0].userId.toString() !==
+  
+      if(todos){
+        if (todos && todos[0].userId.toString() !==
       req.user._id.toString()
     ) {
       return res.status(403).json({
@@ -199,13 +163,50 @@ export const getTodoById = async (
           "Access denied",
       });
     }
-    //  console.log(todos[0].todo);
-    res.status(200).json({
+      res.status(200).json({
       success: true,
-      todos
+       todos:todos
     });
+  }
+  else{
+   const response = await TodoGenerator({
+     userId:(goal.userId).toString(),
+       goalId:req.params.id,
+        title:goal.title,
+        goalType:goal.goalType,
+        description:goal.description,
+        age:goal.age,
+        currentState:goal.currentState,
+        availableTime:goal.availableTime
+      })
+   
+      if(!response.ok){
+        response.send({
+        success: false,
+        message:"Check your Iternet Connection!"
+      });
 
+ const todo = Todo.find({
+      goalId:req.params.id,
+       })
+    // Ownership Check 
+    if (todo && todo[0].userId.toString() !==
+      req.user._id.toString()
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Access denied",
+      });
+    }
+      res.status(200).json({
+      success: true,
+       todos:todo
+    });
+  }
+}
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -219,47 +220,59 @@ export const getRoadmapById = async (
 ) => {
 
   try {
-          const goal =
+     const goal =
       await Goal.findById(
         req.params.id
       );
- 
+
     if(!goal){
       console.log(req.params.id);
       res.send("goal is not Found!");
     };
+   const roadmap = await Roadmap.find(
+         {goalId:req.params.id}
+      );
+         if(roadmap.length>0){
+if (roadmap[0].userId.toString() !==
+      req.user._id.toString()
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Access denied",
+      });
+    }
 
-      const response = await RoadmapGenerator(`${
-        goal.title,
-        goal.goalType,
-        goal.description,
-        goal.age,
-        goal.currentState,
-        goal.availableTime
-      }`)
+    res.status(200).json({
+      success: true,
+      roadmap,
+    });
+  }
+  else{
+   await RoadmapGenerator({
+        userId:(goal.userId).toString(),
+       goalId:req.params.id,
+        title:goal.title,
+        goalType:goal.goalType,
+        description:goal.description,
+        age:goal.age,
+        currentState:goal.currentState,
+        availableTime:goal.availableTime
+      })
         
+
       if(!response.ok){
         response.send({
         success: false,
         message:"Check your Iternet Connection!"
       });
       }
-
-    const roadmap =
-      await Roadmap.find(
+     const roadmap = await Roadmap.find(
          {goalId:req.params.id}
       );
 
-    if (!roadmap) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Roadmap not found",
-      });
-    }
-
-    // Ownership Check
-    if (
+    // Ownership Check 
+ if (roadmap &&
       roadmap[0].userId.toString() !==
       req.user._id.toString()
     ) {
@@ -274,8 +287,9 @@ export const getRoadmapById = async (
       success: true,
       roadmap,
     });
-
+  }
   } catch (error) {
+     console.log(error);
     res.status(500).json({
       success: false,
       message: error.message,
@@ -288,64 +302,93 @@ export const getSystemById = async (
   res
 ) => {
   try {
-      const goal =
-      await Goal.find(
-         {goalId:req.params.id}
+    console.log(req.params.id);
+     const goal =
+      await Goal.findById(
+        req.params.id
       );
- 
-      console.log("Goal:",goal);
-
     if(!goal){
       console.log(req.params.id);
       res.send("goal is not Found!");
     };
 
-      const response = await SystemGenerator(`${
-        goal.title,
-        goal.goalType,
-        goal.description,
-        goal.age,
-        goal.currentState,
-        goal.availableTime
-      }`)
-    
-      if(!response.ok){
-        response.send({
-        success: false,
-        message:"Check your Iternet Connection!"
-      });
-      }
-
-    const system =
-      await System.find(
+  const system = await System.find(
        {goalId:req.params.id}
       );
-
-    if (!system) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "System not found",
-      });
-    }
-
-    // Ownership Check
-
-    if (
-      system[0].userId.toString() !==
+      if(system.length>0){
+      if(system[0].userId.toString() !==
       req.user._id.toString()
     ) {
       return res.status(403).json({
         success: false,
-        message:
-          "Access denied",
+        message:"Access denied",
       });
     }
-    //  console.log(system[0].system);
 
     res.status(200).json({
       success: true,
       system,
+    });
+}else{  
+     await SystemGenerator({
+       userId:(goal.userId).toString(),
+       goalId:req.params.id,
+        title:goal.title,
+        goalType:goal.goalType,
+        description:goal.description,
+        age:goal.age,
+        currentState:goal.currentState,
+        availableTime:goal.availableTime
+      });
+
+ const newSystem = await System.find({
+    goalId: req.params.id,
+  });
+
+  return res.status(200).json({
+    success: true,
+    system: newSystem,
+  });
+}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+//goal byId
+export const getGoalById = async (
+  req,
+  res
+) => {
+  try {
+    
+   const goal =
+      await Goal.findById(
+        req.params.id
+      );
+      
+    if (!goal) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Goal not found",
+      });
+    }
+
+
+    const aiContent =
+      await AIContent.findOne({
+        goalHash:goal.goalHash,
+      });
+
+    res.status(200).json({
+      success: true,
+      goal,
+      aiContent,
     });
 
   } catch (error) {
@@ -355,7 +398,6 @@ export const getSystemById = async (
     });
   }
 };
-
 
 // Delete Goal
 export const deleteGoal = async (

@@ -4,12 +4,17 @@ import StatCard from "./StatCard";
   import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { API_URL } from "../../config/api";
+import { jsonrepair } from "jsonrepair";
+import ChatBox from "../common/ChatBox";
+import InternalNavbar from "../common/InternalNavbar";
 
 export default function System() {
 const { id } = useParams();
-  const [data, setSystem] = useState("");
+ const [data, setSystem] = useState(null);
   const token = localStorage.getItem("token");
-
+  const [message,setMessage] = useState("");
+  const [userId,setUserId] = useState(null);
+  
    const fetchSystem = async () => {
     try {
       const response = await fetch(
@@ -22,8 +27,22 @@ const { id } = useParams();
       );
 
  const data = await response.json();
- console.log(data);
-const systemJson = JSON.parse(data.system[0].system);
+ setUserId(data.system[0].userId);
+ const raw = data.system[0].system;
+
+const cleaned = data.system[0].system.replace(
+  /```json|```/g,
+  ""
+).trim();
+
+
+  if(cleaned.success === false){
+    setMessage(data.message);
+  }
+
+const systemJson = JSON.parse(
+  jsonrepair(cleaned)
+);
 console.log(systemJson);
     setSystem(systemJson);
     }catch(err){
@@ -33,14 +52,21 @@ console.log(systemJson);
   }
     useEffect(()=>{
     fetchSystem();
-  },[id])
-  console.log(data);
-  if (!data) {
-  return <h1>Loading...</h1>;
+  },[])
+
+if(userId){
+  localStorage.setItem("userId",userId);
+}
+
+if (!data) {
+  
+  return <>      
+  <InternalNavbar/>
+  <h1 className="p-8">{message || "Loading..."}</h1></>;
 }
   return (
     <div className="space-y-8">
-
+      <InternalNavbar/>
       {/* Analysis */}
     {/* Analysis */}
 <section className="bg-white rounded-2xl shadow p-6">
@@ -421,7 +447,7 @@ console.log(systemJson);
 
   </div>
 </section>
-
+    <ChatBox data={data} id={id}/>
     </div>
   );
 }

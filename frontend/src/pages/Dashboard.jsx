@@ -5,7 +5,6 @@ import TodoSection from "../component/Todo/TodoSection";
 import RoadmapSection from "../component/Roadmap/RoadmapSection";
 import SystemSection from "../component/System/SystemSection";
 
-
 function Dashboard() {
   const { id } = useParams();
   const [goalData, setGoal] = useState(null);

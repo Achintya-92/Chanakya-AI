@@ -11,6 +11,7 @@ export default async function SystemGenerator({
       availableTime,}){
 
 const apiKey = process.env.OPENROUTER_API_KEY;
+console.log(apiKey);
     try{
  const res =await fetch(`https://openrouter.ai/api/v1/chat/completions`,
         {
@@ -20,8 +21,11 @@ const apiKey = process.env.OPENROUTER_API_KEY;
             Authorization:`Bearer ${apiKey.trim()}`,
             "Content-Type": "application/json"
         },
+        response_format: {
+      type: "json_object"
+},
         body: JSON.stringify({
-        model : "openrouter/free",
+        model : "deepseek/deepseek-chat",
 
         messages: [
             {
@@ -205,27 +209,22 @@ Every array must contain meaningful items.
 
 Return ONLY valid JSON matching the schema exactly.
 
+importent note:- Output must be parseable by JSON.parse().
+
+
              `
             }
         ]
         })
      })
-
 const data = await res.json();
-console.log(data);
 const content = data.choices?.[0]?.message?.content;
-   console.log(content);
-try {
-
-  await System.create({
+console.log(content);
+ await System.create({
     userId,
     goalId,
     system:content
   });
-
-} catch (err) {
-  console.log("Invalid JSON:");
-}
     } catch(err){
          console.error(err);
     }

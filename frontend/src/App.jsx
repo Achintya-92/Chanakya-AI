@@ -15,7 +15,10 @@ import CreateGoal from "./pages/CreateGoal.jsx";
 import SystemSection from "./component/System/SystemSection.jsx";
 import RoadmapSection from "./component/Roadmap/RoadmapSection.jsx";
 import TodoSection from "./component/Todo/TodoSection.jsx";
-
+import ChatPage from "./component/common/ChatPage.jsx";
+import Feedback from "./component/common/Feedback.jsx";
+import AccountPage from "./pages/AccountPage.jsx";
+import ChatSection from "./component/common/ChatSection.jsx";
 
 function App() {
   return (
@@ -44,6 +47,43 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+         <Route
+          path="/chatSection/:id"
+          element={
+            <ProtectedRoute>
+              <ChatSection />
+            </ProtectedRoute>
+          }
+        />
+
+         <Route
+          path="/chatpage/:id"
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          }
+        />
+
+                <Route
+          path="/accountPage/:id"
+          element={
+            <ProtectedRoute>
+              <AccountPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/feedback/:id"
+          element={
+            <ProtectedRoute>
+              <Feedback />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/todo/:id"
           element={

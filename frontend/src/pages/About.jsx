@@ -144,7 +144,7 @@ export default function About() {
 
           <p className="mt-5 text-slate-600 text-lg">
             Motivation fades. Systems create results.
-            Lakshya AI helps you build those systems.
+            Chanakya AI helps you build those systems.
           </p>
 
           <button  onClick={() => navigate("/register")} className="mt-8 px-8 py-4 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition">

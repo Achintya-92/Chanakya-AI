@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { API_URL } from "../config/api";
-
+import {useNavigate} from "react-router-dom"
 function Register() {
     const [username,setUsername] =useState("");
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const [message,setMessage]=useState("");
-
+    const navigate = useNavigate();
     const handleSubmit = async (e) =>{
        e.preventDefault();
       try{
@@ -17,14 +17,12 @@ function Register() {
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (response.ok) {
            localStorage.setItem("token", data.token); 
-
            console.log(data.token)
-
         setMessage("Registered successfully!");
-        navigate("/Dashboard")
+        navigate(`/creategoal/${data.user.id}`)
       } else {
         setMessage(`${data.message}`);
       }

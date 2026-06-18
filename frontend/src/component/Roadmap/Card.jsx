@@ -1,5 +1,4 @@
 export default function Card({ title, items }) {
-  console.log(title,":",items);
   return (
     <div className="border rounded-xl p-4">
       <h3 className="font-bold mb-3">

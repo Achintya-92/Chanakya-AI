@@ -4,14 +4,17 @@ import { API_URL } from "../../config/api";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ChatBox from "../common/ChatBox";
+import InternalNavbar from "../common/InternalNavbar";
 
 export default function RoadmapSection()
  {
-   const { id } = useParams();
+  const { id } = useParams();
+  const [userId,setUserId] = useState(null);
   const [roadmap,setRoadmap] = useState(null);
-  const token = localStorage.getItem("token");
+  const token =localStorage.getItem("token");
+  const [message,setMessage]=useState();
 
-   const fetchRoadmap = async () => {
+  const fetchRoadmap = async () => {
     try {
       const response = await fetch(
         `${API_URL}/goals/roadmap/${id}`,
@@ -20,22 +23,20 @@ export default function RoadmapSection()
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-
-const data = await response.json();
-const roadmapJson = JSON.parse(data.roadmap[0].roadmap);
-setRoadmap(roadmapJson);
-    setRoadmap(roadmapJson);
-    }catch(err){
-    console.log(roadmap); 
+      ),
+  data = await response.json();
+  setUserId(data.roadmap[0].userId);
+  const roadmapJson = JSON.parse(data?.roadmap[0]?.roadmap);
+  setRoadmap(roadmapJson);
+    }
+    catch(err){
       console.log(error);
     }
    
   }
   useEffect(()=>{
   fetchRoadmap();
-  },[id])
- console.log(roadmap);
+  },[])
 
 function RiskManagementSection({
   risks,
@@ -66,12 +67,28 @@ function RiskManagementSection({
   );
 }
 
-if (!roadmap) {
-  return <h1>Loading...</h1>;
+if(userId){
+  localStorage.setItem("userId",userId);
 }
+
+
+if(!roadmap){
+  return(
+    <>
+    <InternalNavbar/>
+    {
+message
+    }
+||
+   Loading roadmap.....
+  </>
+)
+    }
+
+
   return (
     <div className="space-y-8">
-
+<InternalNavbar/>
       {/* Analysis */}
       <section className="bg-white rounded-2xl shadow p-6">
         <h2 className="text-2xl font-bold mb-4">
@@ -275,7 +292,7 @@ if (!roadmap) {
       <RoadmapList title={"Success Metrics"} items={roadmap.successMetrics} />
 
       </section>
-       <ChatBox data={roadmap} id={id}/>
+       <ChatBox d={roadmap} id={id}/>
     </div>
   );
 }

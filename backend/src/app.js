@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import aiRoute from "./routes/aiRoutes.js";
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/user/goals", goalRoutes);
+app.use("/api/goals", goalRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/ai/Chats",aiRoute);
 export default app;

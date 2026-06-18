@@ -5,8 +5,6 @@ export default function GoalSection({
   goals,
 }) 
 {
-  console.log(goals);
-
 
   return (
     <section className="mt-12">
