@@ -24,16 +24,28 @@ export const register = async (req, res) => {
       email,
       password,
     });
- 
-    res.status(201).json({
-      success: true,
-      message: "User registered successfully",
-      user: {
+
+
+    const token = jwt.sign(
+      {
         id: user._id,
-        username: user.username,
-        email: user.email,
       },
-    });
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+
+res.status(201).json({
+  success: true,
+  message: "User registered successfully",
+  token,
+  user: {
+    id: user._id,
+    username: user.username,
+    email: user.email,
+  },
+});
 
   } catch (error) { 
     

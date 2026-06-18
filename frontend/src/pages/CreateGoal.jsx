@@ -25,9 +25,9 @@ if(id){
       .then((res) => res.json())
       .then((data) => setGoals(data.goal))
       .catch((err) => console.error(err));
-  }, []);
+  }, [id]);
 
-if(goals){
+if(goals.length>0){
 
 const todayGoals = goals.filter(
   goal => goal.goalType === "today"

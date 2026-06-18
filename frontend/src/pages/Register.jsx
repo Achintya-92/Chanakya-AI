@@ -20,7 +20,7 @@ function Register() {
       console.log(data);
       if (response.ok) {
            localStorage.setItem("token", data.token); 
-           console.log(data.token)
+           console.log(data.token);
         setMessage("Registered successfully!");
         navigate(`/creategoal/${data.user.id}`)
       } else {
