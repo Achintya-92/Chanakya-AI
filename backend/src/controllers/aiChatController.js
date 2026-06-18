@@ -28,9 +28,12 @@ export const  createChat=async (req,res)=>{
 }
 export const  getChats=async(req,res)=>{
 try{
+
+   if(req.params.userId){
 const chats=await Chat.find({
    userId:req.params.userId
 });
+}
 
 if(!chats){
    res.status(400).send({
