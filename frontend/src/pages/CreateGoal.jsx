@@ -9,8 +9,13 @@ import ChatBox from "../component/common/ChatBox";
 function CreateGoal() {
   const {id} = useParams();
   const [goals, setGoals] = useState([]);
-     
+if(id){
+     localStorage.setItem("userId",id);
+}
   useEffect(() => {
+    if(!id){
+      return;
+    }
     const token = localStorage.getItem("token");
     fetch(`${API_URL}/goals/${id}`, {
       headers: {
@@ -75,7 +80,9 @@ const yearlyGoals = goals.filter(
       title="Life time Goals"
       goals={lifetimeGoals}
     />
+<div className="pt-4"> 
     <ChatBox/>
+</div>
   </>
 );
 }
@@ -88,8 +95,8 @@ else{
 
 <br />
 <br />
-<h2>Create goals still there No goal Exist!</h2>
-    <ChatBox data={roadmap} id={id}/>
+<h2 className="p-4">Create goals still there No goal Exist!</h2>
+    <ChatBox id={id}/>
   </>
 );
 }

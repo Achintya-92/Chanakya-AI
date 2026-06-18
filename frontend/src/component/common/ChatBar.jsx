@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { API_URL } from "../../config/api";
+import InternalNavbar from "./InternalNavbar";
 
 function ChatBar({ closeSidebar }) {
   const userId = localStorage.getItem("userId");
@@ -9,6 +10,9 @@ function ChatBar({ closeSidebar }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if(!userId){
+      return;
+    }
     const token = localStorage.getItem("token");
 
     fetch(`${API_URL}/ai/chats/${userId}`, {
@@ -20,9 +24,12 @@ function ChatBar({ closeSidebar }) {
       .then((data) => setChats(data.chats))
       .catch(console.error);
   }, [userId]);
-
-  console.log(chats[0]);
-
+console.log(chats);
+  if(!chats){
+    return(<>
+    </>
+    );
+  }
   return (
     <div className="w-1/2 h-screen p-2 bg-black text-white border-r shadow-[0_4px_6px_0_rgba(0,255,0)]">
       <h3 className="border mb-2 border-white-500 p-4 rounded-3xl">Your Chats</h3>
