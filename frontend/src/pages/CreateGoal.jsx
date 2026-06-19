@@ -7,25 +7,20 @@ import GoalSection from "../component/Goal/GoalSection";
 import ChatBox from "../component/common/ChatBox";
 
 function CreateGoal() {
-  const {id} = useParams();
   const [goals, setGoals] = useState([]);
-if(id){
-     localStorage.setItem("userId",id);
-}
+  const id = localStorage.getItem("userId");
+
   useEffect(() => {
-    if(!id){
-      return;
-    }
     const token = localStorage.getItem("token");
-    fetch(`${API_URL}/goals/${id}`, {
+    fetch(`${API_URL}/goals/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
+      .then((res) => (res.json()))
       .then((data) => setGoals(data.goal))
       .catch((err) => console.error(err));
-  }, [id]);
+  });
 
 if(goals.length>0){
 
@@ -52,7 +47,7 @@ const yearlyGoals = goals.filter(
 
   <>
 
-    <Navbar userId={id}/>
+    <Navbar/>
 
     <GoalForm/>
 

@@ -20,9 +20,10 @@ function Register() {
       console.log(data);
       if (response.ok) {
            localStorage.setItem("token", data.token); 
+           localStorage.setItem("userId",data.user.id)
            console.log(data.token);
         setMessage("Registered successfully!");
-        navigate(`/creategoal/${data.user.id}`)
+        navigate(`/creategoal`)
       } else {
         setMessage(`${data.message}`);
       }

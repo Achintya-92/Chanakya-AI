@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { API_URL } from "../../config/api";
 import  ChatBox from "../common/ChatBox";
 import InternalNavbar from "../common/InternalNavbar";
+import LoaderCard from "../common/Loader";
 
 export default function TodoSection() {
   const {id} =useParams();
@@ -14,8 +15,12 @@ export default function TodoSection() {
   const [todo,setTodo]=useState("");
   const token = localStorage.getItem("token");
   const [userId, setUserId] = useState([]);
-     
+  const [loaded,setLoaded] =useState(false); 
+  const [message,setMessage]=useState("");
+
+  
   useEffect(() => {
+    if(!loaded){
     const token = localStorage.getItem("token");
     fetch(`${API_URL}/goals/${id}`, {
       headers: {
@@ -23,9 +28,17 @@ export default function TodoSection() {
       },
     })
       .then((res) => res.json())
-      .then((data) => setGoals(data.goal))
-      .catch((err) => console.error(err));
-  }, []);
+      .then((data) =>{ setGoals(data?.goal), data.success ? setLoaded(true):setLoaded(false) })
+      .catch((err) => {console.error(err); setMessage(err);});
+  }else{
+     if(message){
+return(
+      <LoaderCard message={message}/>
+)
+      }
+      <LoaderCard message="Creating Todos for you!"/>
+  }
+  }, [id]);
 
  function extractJson(text) {
   const match = text.match(/\{[\s\S]*\}/);
@@ -65,7 +78,7 @@ export default function TodoSection() {
   if(userId){
     localStorage.setItem("userId",userId);
   }
-  if (!todo) {
+  if (!todo && loaded) {
   return <><InternalNavbar/><h1 className="p-8">Loading Todos...</h1></>;
 }
   return (

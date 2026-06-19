@@ -19,6 +19,7 @@ import ChatPage from "./component/common/ChatPage.jsx";
 import Feedback from "./component/common/Feedback.jsx";
 import AccountPage from "./pages/AccountPage.jsx";
 import ChatSection from "./component/common/ChatSection.jsx";
+import  Loader  from "./component/common/Loader.jsx";
 
 function App() {
   return (
@@ -40,7 +41,7 @@ function App() {
 
         {/* Protected Routes */}
                 <Route
-          path="/creategoal/:id"
+          path="/creategoal"
           element={
             <ProtectedRoute>
               <CreateGoal />

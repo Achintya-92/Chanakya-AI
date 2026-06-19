@@ -21,11 +21,9 @@ function Login() {
       if (response.ok) {
         localStorage.setItem("token", data.token);
         setMessage("✅ Logged in successfully!");
-
-        
         const token = localStorage.getItem("token");
-        console.log(token);
-navigate(`/creategoal/${data.user.id}`);
+        localStorage.setItem("userId",data.user.id);
+        navigate(`/creategoal`)
       } else {
         setMessage(`❌ ${data.message}`);
       }

@@ -22,7 +22,7 @@ router.get("/system/:id",protect, getSystemById);
 
 router.delete("/:id", protect, deleteGoal);
 
-router.get("/:id",protect, getGoalByUserId);
+router.get("/",protect, getGoalByUserId);
 
 router.get("/goal/:id",protect, getGoalById);
 

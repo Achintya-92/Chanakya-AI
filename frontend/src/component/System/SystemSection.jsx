@@ -7,6 +7,7 @@ import { API_URL } from "../../config/api";
 import { jsonrepair } from "jsonrepair";
 import ChatBox from "../common/ChatBox";
 import InternalNavbar from "../common/InternalNavbar";
+import Loader from "../common/Loader";
 
 export default function System() {
 const { id } = useParams();
@@ -14,8 +15,10 @@ const { id } = useParams();
   const token = localStorage.getItem("token");
   const [message,setMessage] = useState("");
   const [userId,setUserId] = useState(null);
-  
+  const [loaded,setLoaded] = useState(false);
+
    const fetchSystem = async () => {
+    if(!loaded){
     try {
       const response = await fetch(
         `${API_URL}/goals/system/${id}`,
@@ -35,7 +38,6 @@ const cleaned = data.system[0].system.replace(
   ""
 ).trim();
 
-
   if(cleaned.success === false){
     setMessage(data.message);
   }
@@ -44,11 +46,21 @@ const systemJson = JSON.parse(
   jsonrepair(cleaned)
 );
 console.log(systemJson);
+data.success ? setLoaded(true):setLoaded(false);
     setSystem(systemJson);
-    }catch(err){
+    }
+    catch(err){
+      setMessage(err)
       console.log(err);
     }
-   
+  }else{
+      if(message){
+return(
+      <LoaderCard message={message}/>
+)
+      }
+      <LoaderCard message="Creating System for you!"/>
+  }
   }
     useEffect(()=>{
     fetchSystem();
@@ -58,7 +70,7 @@ if(userId){
   localStorage.setItem("userId",userId);
 }
 
-if (!data) {
+if (!data && loaded) {
   
   return <>      
   <InternalNavbar/>

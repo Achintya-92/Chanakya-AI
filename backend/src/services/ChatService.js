@@ -12,7 +12,6 @@ export default async function ChatService({
 
 let prompt = "";
 
-console.log(chat);
 if (pageContent !== undefined && goalId !== undefined) {
     prompt = `
          You are Chanakya AI, an elite execution coach, mentor, strategist, productivity consultant, career advisor, and accountability partner.

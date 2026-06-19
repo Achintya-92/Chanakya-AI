@@ -96,39 +96,25 @@ export const createGoal = async (req, res) => {
 };
 
 // Get All Goals of Logged-in User
-export const getGoalByUserId = async (
-  req,
-  res
-) => {
+export const getGoalByUserId = async (req, res) => {
   try {
-    
-    const goal =
-      await Goal.find({userId:req.params.id});
-    if (!goal) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Goal not found",
-      });
-    }
 
+    const goals = await Goal.find({
+      userId: req.user._id,
+    });
 
-    const aiContent =
-      await AIContent.findOne({
-        goalHash:goal.goalHash,
-      });
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      goal,
-      aiContent,
+      goal: goals, // [] if empty
     });
 
   } catch (error) {
-    res.status(500).json({
+
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
+
   }
 };
 
@@ -141,8 +127,7 @@ export const getTodoById = async (
       await Goal.findById(
         req.params.id
       );
-    if(!goal){
-      console.log(req.params.id);
+    if(!(goal.length>0)){
       res.send("goal is not Found!");
     };
 
@@ -153,7 +138,7 @@ export const getTodoById = async (
         }
       );
   
-      if(todos){
+      if (todos.length > 0) {
         if (todos && todos[0].userId.toString() !==
       req.user._id.toString()
     ) {
@@ -169,7 +154,7 @@ export const getTodoById = async (
     });
   }
   else{
-   const response = await TodoGenerator({
+  await TodoGenerator({
      userId:(goal.userId).toString(),
        goalId:req.params.id,
         title:goal.title,
@@ -179,18 +164,12 @@ export const getTodoById = async (
         currentState:goal.currentState,
         availableTime:goal.availableTime
       })
-   
-      if(!response.ok){
-        response.send({
-        success: false,
-        message:"Check your Iternet Connection!"
-      });
 
- const todo = Todo.find({
+ const todo =await Todo.find({
       goalId:req.params.id,
        })
     // Ownership Check 
-    if (todo && todo[0].userId.toString() !==
+    if (todo.length>0 && todo[0].userId.toString() !==
       req.user._id.toString()
     ) {
       return res.status(403).json({
@@ -204,8 +183,7 @@ export const getTodoById = async (
        todos:todo
     });
   }
-}
-  } catch (error) {
+}catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
@@ -225,7 +203,7 @@ export const getRoadmapById = async (
         req.params.id
       );
 
-    if(!goal){
+    if(goal.length>0){
       console.log(req.params.id);
       res.send("goal is not Found!");
     };
@@ -410,7 +388,7 @@ export const deleteGoal = async (
         req.params.id
       );
 
-    if (!goal) {
+    if (!(goal.length>0)) {
       return res.status(404).json({
         success: false,
         message:

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ChatBox from "../common/ChatBox";
 import InternalNavbar from "../common/InternalNavbar";
+import Loader from "../common/Loader";
 
 export default function RoadmapSection()
  {
@@ -12,9 +13,11 @@ export default function RoadmapSection()
   const [userId,setUserId] = useState(null);
   const [roadmap,setRoadmap] = useState(null);
   const token =localStorage.getItem("token");
-  const [message,setMessage]=useState();
-
+  const [message,setMessage]=useState("");
+ const [loaded,setLoaded] =useState(false); 
+   
   const fetchRoadmap = async () => {
+    if(!loaded){
     try {
       const response = await fetch(
         `${API_URL}/goals/roadmap/${id}`,
@@ -27,16 +30,25 @@ export default function RoadmapSection()
   data = await response.json();
   setUserId(data.roadmap[0].userId);
   const roadmapJson = JSON.parse(data?.roadmap[0]?.roadmap);
+  data.success ? setLoaded(true):setLoaded(false);
   setRoadmap(roadmapJson);
     }
     catch(err){
-      console.log(error);
+      setMessage(err)
+      console.log(err);
     }
-   
+  }else{
+      if(message){
+return(
+      <LoaderCard message={message}/>
+)
+      }
+      <LoaderCard message="Creating Roadmap for you!"/>
+  }
   }
   useEffect(()=>{
   fetchRoadmap();
-  },[])
+  },[id])
 
 function RiskManagementSection({
   risks,
@@ -72,7 +84,7 @@ if(userId){
 }
 
 
-if(!roadmap){
+if(!roadmap && loaded){
   return(
     <>
     <InternalNavbar/>
