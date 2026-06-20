@@ -5,19 +5,17 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ChatBox from "../common/ChatBox";
 import InternalNavbar from "../common/InternalNavbar";
-import Loader from "../common/Loader";
+import LoaderCard from "../common/Loader";
 
 export default function RoadmapSection()
  {
   const { id } = useParams();
-  const [userId,setUserId] = useState(null);
   const [roadmap,setRoadmap] = useState(null);
   const token =localStorage.getItem("token");
   const [message,setMessage]=useState("");
- const [loaded,setLoaded] =useState(false); 
+ const [loaded,setLoaded] =useState(true); 
    
   const fetchRoadmap = async () => {
-    if(!loaded){
     try {
       const response = await fetch(
         `${API_URL}/goals/roadmap/${id}`,
@@ -28,27 +26,30 @@ export default function RoadmapSection()
         }
       ),
   data = await response.json();
-  setUserId(data.roadmap[0].userId);
-  const roadmapJson = JSON.parse(data?.roadmap[0]?.roadmap);
-  data.success ? setLoaded(true):setLoaded(false);
-  setRoadmap(roadmapJson);
+  console.log(data);
+console.log(data?.roadmap?.[0]?.roadmap[0]);
+  setRoadmap(data?.roadmap[0]?.roadmap[0]);
     }
     catch(err){
-      setMessage(err)
+      setMessage("Failed To load roadmap!");
       console.log(err);
+    }finally{
+      setLoaded(false);
     }
-  }else{
-      if(message){
-return(
-      <LoaderCard message={message}/>
-)
-      }
-      <LoaderCard message="Creating Roadmap for you!"/>
   }
-  }
+
   useEffect(()=>{
   fetchRoadmap();
   },[id])
+
+   if (loaded) {
+    const msg=message||"Loading Roadmap.";
+    return (
+      <>
+        <LoaderCard message={msg} />
+      </>
+    );
+  }
 
 function RiskManagementSection({
   risks,
@@ -78,25 +79,6 @@ function RiskManagementSection({
     </div>
   );
 }
-
-if(userId){
-  localStorage.setItem("userId",userId);
-}
-
-
-if(!roadmap && loaded){
-  return(
-    <>
-    <InternalNavbar/>
-    {
-message
-    }
-||
-   Loading roadmap.....
-  </>
-)
-    }
-
 
   return (
     <div className="space-y-8">

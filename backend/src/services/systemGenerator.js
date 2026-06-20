@@ -25,7 +25,7 @@ console.log(apiKey);
       type: "json_object"
 },
         body: JSON.stringify({
-        model : "deepseek/deepseek-chat",
+        model : "openRouter/free",
 
         messages: [
             {
@@ -219,15 +219,42 @@ importent note:- Output must be parseable by JSON.parse().
      })
 const data = await res.json();
 const content = data.choices?.[0]?.message?.content;
-console.log(content);
+const cleaned = content
+  .replace(/```json|```/g, "")
+  .trim();
+
+let parsed;
+
+try {
+  parsed = JSON.parse(cleaned);
+} catch (err) {
+  console.error("Invalid JSON from AI:");
+  console.log(cleaned);
+  throw err;
+}
+
  await System.create({
     userId,
     goalId,
-    system:content
+    system:parsed
   });
-    } catch(err){
-         console.error(err);
-    }
-    
+    }catch (err) {
+   if (
+    err.cause?.code === "UND_ERR_CONNECT_TIMEOUT" ||
+    err.cause?.code === "UND_ERR_HEADERS_TIMEOUT" ||
+    err.cause?.code === "UND_ERR_SOCKET" ||
+    err.cause?.code === "ENOTFOUND" ||
+    err.cause?.code === "ECONNREFUSED"
+  ) {
+    return res.status(503).json({
+      success: false,
+      message: "Unable to connect to the AI service. Please check your internet connection or try again later.",
+    });
+  }else{
+   return res.status(500).json({
+    success: false,
+    message: err,
+  });
+  }
 }
-
+}

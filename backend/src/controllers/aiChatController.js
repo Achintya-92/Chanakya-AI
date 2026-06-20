@@ -29,44 +29,54 @@ export const  createChat=async (req,res)=>{
 export const  getChats=async(req,res)=>{
 try{
 
-   if(req.params.userId){
 const chats=await Chat.find({
-   userId:req.params.userId
+   userId:req.user._id
 });
-}
+
 
 if(!chats){
-   res.status(400).send({
+ return  res.status(404).send({
    success:false,
    message:"Chats Not Found!"
 });
 }
-res.status(201).send({
+ return res.status(201).send({
    success:true,
    chats:chats
 })
 
-if(chats && chats[0].userId.toString()!==req.params.userId){
-   res.status().send({
+if(chats.length>0 && chats[0].userId.toString()!==req.user._id){
+   res.status(403).send({
    success:false,
    message:"Access denied!"
 })
 }
-
 }catch(error){
-console.log(error);
+ return res.status(500).json({
+      success: false,
+      message: "Something Went wrong",
+    });
 }
 }
 
 export const  getChat=async(req,res)=>{
 try{
 const chat=await Chat.findById(req.params.Id);
+
 if(!chat){
-   res.status(400).send({
+   res.status(404).send({
    success:false,
    message:"Chat Not Found!"
 });
 }
+
+if(chat.length>0 && chat[0].userId.toString()!==req.params.userId){
+   res.status(403).send({
+   success:false,
+   message:"Access denied!"
+})
+}
+
 res.status(201).send({
    success:true,
    chat:chat
@@ -74,6 +84,9 @@ res.status(201).send({
 
 }catch(error){
 console.log(error);
-res.send({success:false,message:error});
+ return res.status(500).json({
+      success: false,
+      message: "Something Went wrong",
+    });
 }
 }

@@ -103,16 +103,31 @@ export const getGoalByUserId = async (req, res) => {
       userId: req.user._id,
     });
 
+if (!goals) {
+  return res.status(404).json({
+    success: false,
+    message: "Create a goal first.",
+  });
+}
+
+
+if (goals[0].userId.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+        success:false,
+        message:"Access denied"
+    });
+}
+
     return res.status(200).json({
       success: true,
-      goal: goals, // [] if empty
+      goals: goals, // [] if empty
     });
 
   } catch (error) {
 
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something Went wrong",
     });
 
   }
@@ -123,13 +138,21 @@ export const getTodoById = async (
   res
 ) => {
   try {
-     const goal =
-      await Goal.findById(
-        req.params.id
-      );
-    if(!(goal.length>0)){
-      res.send("goal is not Found!");
-    };
+    const goal = await Goal.findById(req.params.id);
+
+if (!goal) {
+  return res.status(404).json({
+    success: false,
+    message: "Create a goal first.",
+  });
+}
+
+if (goal.userId.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+        success:false,
+        message:"Access denied"
+    });
+}
 
      const todos =
       await Todo.find(
@@ -138,17 +161,8 @@ export const getTodoById = async (
         }
       );
   
-      if (todos.length > 0) {
-        if (todos && todos[0].userId.toString() !==
-      req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message:
-          "Access denied",
-      });
-    }
-      res.status(200).json({
+      if (todos.length > 0) 
+    { return res.status(200).json({
       success: true,
        todos:todos
     });
@@ -169,25 +183,18 @@ export const getTodoById = async (
       goalId:req.params.id,
        })
     // Ownership Check 
-    if (todo.length>0 && todo[0].userId.toString() !==
-      req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message:
-          "Access denied",
-      });
-    }
-      res.status(200).json({
+    if (todo.length>0) {
+    return  res.status(200).json({
       success: true,
        todos:todo
     });
   }
+  }
 }catch (error) {
     console.log(error);
-    res.status(500).json({
+  return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something Went wrong",
     });
   }
 };
@@ -203,25 +210,22 @@ export const getRoadmapById = async (
         req.params.id
       );
 
-    if(goal.length>0){
+    if(goal.length==0){
       console.log(req.params.id);
-      res.send("goal is not Found!");
+      res.send({success: false,message:"Create a goal first."});
     };
+
+    if (goal.userId.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+        success:false,
+        message:"Access denied"
+    });
+}
    const roadmap = await Roadmap.find(
          {goalId:req.params.id}
       );
-         if(roadmap.length>0){
-if (roadmap[0].userId.toString() !==
-      req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message:
-          "Access denied",
-      });
-    }
-
-    res.status(200).json({
+      if(roadmap.length>0){
+  return  res.status(200).json({
       success: true,
       roadmap,
     });
@@ -239,38 +243,20 @@ if (roadmap[0].userId.toString() !==
       })
         
 
-      if(!response.ok){
-        response.send({
-        success: false,
-        message:"Check your Iternet Connection!"
-      });
-      }
      const roadmap = await Roadmap.find(
          {goalId:req.params.id}
       );
 
-    // Ownership Check 
- if (roadmap &&
-      roadmap[0].userId.toString() !==
-      req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message:
-          "Access denied",
-      });
-    }
-
-    res.status(200).json({
+  return  res.status(200).json({
       success: true,
       roadmap,
     });
   }
   } catch (error) {
      console.log(error);
-    res.status(500).json({
+   return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something Went wrong",
     });
   }
 };
@@ -280,29 +266,26 @@ export const getSystemById = async (
   res
 ) => {
   try {
-    console.log(req.params.id);
-     const goal =
-      await Goal.findById(
-        req.params.id
-      );
-    if(!goal){
-      console.log(req.params.id);
-      res.send("goal is not Found!");
-    };
+    const goal = await Goal.findById(req.params.id);
+
+if (!goal) {
+  return res.status(404).json({
+    success: false,
+    message: "Create a goal first.",
+  });
+}
+
+if (goal.userId.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+        success:false,
+        message:"Access denied"
+    });
+}
 
   const system = await System.find(
        {goalId:req.params.id}
       );
       if(system.length>0){
-      if(system[0].userId.toString() !==
-      req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        success: false,
-        message:"Access denied",
-      });
-    }
-
     res.status(200).json({
       success: true,
       system,
@@ -330,9 +313,9 @@ export const getSystemById = async (
 }
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+   return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something Went wrong",
     });
   }
 };
@@ -357,6 +340,12 @@ export const getGoalById = async (
       });
     }
 
+    if (goal.userId.toString() !== req.user._id.toString()) {
+    return res.status(403).json({
+        success:false,
+        message:"Access denied"
+    });
+}
 
     const aiContent =
       await AIContent.findOne({
@@ -370,9 +359,9 @@ export const getGoalById = async (
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something Went wrong",
     });
   }
 };
@@ -417,9 +406,9 @@ export const deleteGoal = async (
     });
 
   } catch (error) {
-    res.status(500).json({
+     return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Something Went wrong",
     });
   }
 };

@@ -4,11 +4,9 @@ import InternalNavbar from "./InternalNavbar";
 import ChatBox from "./ChatBox";
 
 function ChatSection() {
-    const userId=localStorage.getItem("userId");
-console.log(userId);
 
     return ( <div>
-        <InternalNavbar userId={userId}/>
+        <InternalNavbar/>
         <div className="min-h-screen flex items-center justify-center">
   <ChatBox />
 </div>

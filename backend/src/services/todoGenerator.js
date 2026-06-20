@@ -24,7 +24,7 @@ const apiKey = process.env.OPENROUTER_API_KEY;
   type: "json_object"
 },
         body: JSON.stringify({
-        model: "openrouter/free",
+        model: "deepseek/deepseek-chat",
 
   messages: [
             {
@@ -204,7 +204,7 @@ Return ONLY valid JSON matching the schema exactly.
 
 const data = await res.json();
  if(!data){
-    res.send("Chek Internet Connectivity")
+    res.send({message:"Chek Internet Connectivity"})
    }
 
 const content = data.choices?.[0]?.message?.content;
@@ -213,7 +213,15 @@ const cleaned = content
   .replace(/```json|```/g, "")
   .trim();
 
-const parsed = JSON.parse(cleaned);
+let parsed;
+
+try {
+  parsed = JSON.parse(cleaned);
+} catch (err) {
+  console.error("Invalid JSON from AI:");
+  console.log(cleaned);
+  throw err;
+}
 
 try {
   await Todo.create({
@@ -226,6 +234,22 @@ try {
   console.log("Invalid JSON:");
 }
 } catch (err) {
-  console.log("Invalid JSON");
+   if (
+    err.cause?.code === "UND_ERR_CONNECT_TIMEOUT" ||
+    err.cause?.code === "UND_ERR_HEADERS_TIMEOUT" ||
+    err.cause?.code === "UND_ERR_SOCKET" ||
+    err.cause?.code === "ENOTFOUND" ||
+    err.cause?.code === "ECONNREFUSED"
+  ) {
+    return res.status(503).json({
+      success: false,
+      message: "Unable to connect to the AI service. Please check your internet connection or try again later.",
+    });
+  }else{
+   return res.status(500).json({
+    success: false,
+    message: "Internal Server Error",
+  });
+  }
 }
-      }
+}

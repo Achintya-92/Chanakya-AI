@@ -21,7 +21,7 @@ const apiKey = process.env.OPENROUTER_API_KEY;
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-        model : "openrouter/free",
+        model : "deepseek/deepseek-chat",
 
         messages: [
             {
@@ -215,12 +215,20 @@ const data = await res.json();
    }
 
 const content = data.choices?.[0]?.message?.content;
-
+console.log(content);
 const cleaned = content
   .replace(/```json|```/g, "")
   .trim();
 
-const parsed = JSON.parse(cleaned);
+let parsed;
+
+try {
+  parsed = JSON.parse(cleaned);
+} catch (err) {
+  console.error("Invalid JSON from AI:");
+  console.log(cleaned);
+  throw err;
+}
 
 try {
 await Roadmap.create({
@@ -233,9 +241,23 @@ await Roadmap.create({
   console.log("Invalid JSON:");
 }
 
-    } catch(err){
-         console.error(err);
-    }
-    
+    } catch (err) {
+   if (
+    err.cause?.code === "UND_ERR_CONNECT_TIMEOUT" ||
+    err.cause?.code === "UND_ERR_HEADERS_TIMEOUT" ||
+    err.cause?.code === "UND_ERR_SOCKET" ||
+    err.cause?.code === "ENOTFOUND" ||
+    err.cause?.code === "ECONNREFUSED"
+  ) {
+    return res.status(503).json({
+      success: false,
+      message: "Unable to connect to the AI service. Please check your internet connection or try again later.",
+    });
+  }else{
+   return res.status(500).json({
+    success: false,
+    message: err,
+  });
+  }
 }
-
+}

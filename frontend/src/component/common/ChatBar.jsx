@@ -4,18 +4,14 @@ import { API_URL } from "../../config/api";
 import InternalNavbar from "./InternalNavbar";
 
 function ChatBar({ closeSidebar }) {
-  const userId = localStorage.getItem("userId");
   const [chats, setChats] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!userId){
-      return;
-    }
     const token = localStorage.getItem("token");
 
-    fetch(`${API_URL}/ai/chats/${userId}`, {
+    fetch(`${API_URL}/ai/chats/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -23,8 +19,8 @@ function ChatBar({ closeSidebar }) {
       .then((res) => res.json())
       .then((data) => setChats(data.chats))
       .catch(console.error);
-  }, [userId]);
-console.log(chats);
+  });
+
   if(!chats){
     return(<>
     </>

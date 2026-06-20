@@ -15,10 +15,9 @@ const { id } = useParams();
   const token = localStorage.getItem("token");
   const [message,setMessage] = useState("");
   const [userId,setUserId] = useState(null);
-  const [loaded,setLoaded] = useState(false);
+  const [loaded,setLoaded] = useState(true);
 
    const fetchSystem = async () => {
-    if(!loaded){
     try {
       const response = await fetch(
         `${API_URL}/goals/system/${id}`,
@@ -30,57 +29,37 @@ const { id } = useParams();
       );
 
  const data = await response.json();
- setUserId(data.system[0].userId);
+ console.log(data);
  const raw = data.system[0].system;
-
-const cleaned = data.system[0].system.replace(
-  /```json|```/g,
-  ""
-).trim();
-
-  if(cleaned.success === false){
-    setMessage(data.message);
-  }
-
-const systemJson = JSON.parse(
-  jsonrepair(cleaned)
-);
-console.log(systemJson);
-data.success ? setLoaded(true):setLoaded(false);
-    setSystem(systemJson);
+console.log(raw);
+setSystem(raw);
     }
     catch(err){
       setMessage(err)
       console.log(err);
-    }
-  }else{
-      if(message){
-return(
-      <LoaderCard message={message}/>
-)
-      }
-      <LoaderCard message="Creating System for you!"/>
+    } finally{
+    setLoaded(false);
   }
-  }
+}
     useEffect(()=>{
     fetchSystem();
   },[])
 
-if(userId){
-  localStorage.setItem("userId",userId);
+if (loaded) {
+  return( <>  
+<Loader message={message}/>
+  </>)
 }
 
-if (!data && loaded) {
-  
-  return <>      
-  <InternalNavbar/>
-  <h1 className="p-8">{message || "Loading..."}</h1></>;
-}
+
+  console.log(data.accountabilitySystem
+);
   return (
     <div className="space-y-8">
       <InternalNavbar/>
       {/* Analysis */}
     {/* Analysis */}
+     {data.analysis &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     📊 Analysis
@@ -112,9 +91,11 @@ if (!data && loaded) {
     />
   </div>
 </section>
+}
 
       {/* Rules */}
 {/* Non Negotiable Rules */}
+{data.nonNegotiableRules &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     ⚖️ Non Negotiable Rules
@@ -125,8 +106,9 @@ if (!data && loaded) {
     items={data.nonNegotiableRules}
   />
 </section>
-
+}
 {/* Daily Execution System */}
+{data.dailyExecutionSystem &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     🚀 Daily Execution System
@@ -161,8 +143,10 @@ if (!data && loaded) {
 
   </div>
 </section>
+}
 
 {/* Environment Design */}
+{data.environmentDesign &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     🏠 Environment Design
@@ -192,14 +176,16 @@ if (!data && loaded) {
 
   </div>
 </section>
+}
 
+
+{data.habitStackingSystem &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     🔄 Habit Stacking System
   </h2>
-
   <div className="grid md:grid-cols-2 gap-4">
-    {data.habitStackingSystem.map((habit, i) => (
+    {data?.habitStackingSystem?.map((habit, i) => (
       <div
         key={i}
         className="border rounded-xl p-4"
@@ -222,8 +208,9 @@ if (!data && loaded) {
     ))}
   </div>
 </section>
-
+  }
       {/* Deep Work */}
+      {data.deepWorkSystem &&
       <section className="bg-white rounded-2xl shadow p-6">
 
         <h2 className="text-2xl font-bold mb-4">
@@ -245,8 +232,10 @@ if (!data && loaded) {
         </div>
 
       </section>
+}
 
       {/* Success Dashboard */}
+      {data.successDashboard &&
       <section className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl p-6">
 
         <h2 className="text-2xl font-bold mb-6">
@@ -278,8 +267,10 @@ if (!data && loaded) {
         </div>
 
       </section>
+}
 
       {/* Accountability System */}
+      {data.accountabilitySystem &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     📋 Accountability System
@@ -309,8 +300,10 @@ if (!data && loaded) {
 
   </div>
 </section>
+}
 
 {/* Failure Recovery */}
+{data.failureRecoverySystem &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     🔄 Failure Recovery
@@ -335,8 +328,10 @@ if (!data && loaded) {
 
   </div>
 </section>
+}
 
 {/* Low Motivation Protocol */}
+{data.lowMotivationProtocol &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     ⚡ Low Motivation Protocol
@@ -361,39 +356,11 @@ if (!data && loaded) {
 
   </div>
 </section>
+}
 
-{/* Long Term Sustainability */}
-<section className="bg-white rounded-2xl shadow p-6">
-  <h2 className="text-2xl font-bold mb-4">
-    🌱 Long Term Sustainability
-  </h2>
-
-  <div className="grid md:grid-cols-2 gap-4">
-
-    <Card
-      title="Burnout Prevention"
-      items={data.longTermSustainability.burnoutPrevention}
-    />
-
-    <Card
-      title="Energy Management"
-      items={data.longTermSustainability.energyManagement}
-    />
-
-    <Card
-      title="Sleep Recommendations"
-      items={data.longTermSustainability.sleepRecommendations}
-    />
-
-    <Card
-      title="Recovery Practices"
-      items={data.longTermSustainability.recoveryPractices}
-    />
-
-  </div>
-</section>
 
 {/* Deep Work System */}
+{data.deepWorkSystem &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     🎯 Deep Work System
@@ -422,9 +389,9 @@ if (!data && loaded) {
     title="Focus Rituals"
     items={data.deepWorkSystem.focusRituals}
   />
-
 </section>
-
+}
+{ data.longTermSustainability &&
 <section className="bg-white rounded-2xl shadow p-6">
   <h2 className="text-2xl font-bold mb-4">
     🌱 Long Term Sustainability
@@ -459,6 +426,7 @@ if (!data && loaded) {
 
   </div>
 </section>
+}
     <ChatBox data={data} id={id}/>
     </div>
   );

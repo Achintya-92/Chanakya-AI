@@ -1,33 +1,58 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../../config/api";
-import ChatBar from "./ChatBar";
 import ChatBox from "./ChatBox";
 import InternalNavbar from "./InternalNavbar";
+import LoaderCard from "./Loader";
 
 function ChatPage() {
   const { id } = useParams();
-  const [userId, setUserId] = useState(null);
   const [chat, setChat] = useState(null);
-  
+  const [message,setMessage] = useState("")
+  const [loading,setLoading]=useState(true);
 
-  console.log(id);
   useEffect(() => {
-    if (!id) return;
-    const token = localStorage.getItem("token");
-    fetch(`${API_URL}/ai/chats/chat/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setChat(data.chat.chat);
-        setUserId(data.userId);
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
+  if (!id) return;
+
+  const fetchChat = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${API_URL}/ai/chats/chat/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      setChat(data.chat.chat);
+      setMessage("Chat Loaded");
+    } catch (err) {
+      console.error(err);
+      setMessage(err.message || "Failed to load chat");
+    } finally {
+      setLoading(false);
+    }
+  };
+fetchChat();
+}, [id]);
+
+if (loading) {
+  return <LoaderCard message={message || "Loading Chat."} />;
+}
+
+if (!chat) {
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      No chat found.
+    </div>
+  );
+}
 
 if (!id) {
   return (

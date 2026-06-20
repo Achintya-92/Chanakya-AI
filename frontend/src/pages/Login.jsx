@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
+import TextLoader from "../component/common/TextLoader";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("submitting");
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
@@ -18,18 +23,34 @@ function Login() {
 
       const data = await response.json();
       // console.log(response);
+      if (!response.ok) {
+        setLoading(false);
+      setMessage(data.message || "Login failed");
+      return;
+    }
+
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        setLoading(false);
         setMessage("✅ Logged in successfully!");
         const token = localStorage.getItem("token");
         localStorage.setItem("userId",data.user.id);
         navigate(`/creategoal`)
       } else {
-        setMessage(`❌ ${data.message}`);
+        setLoading(false);
+        setMessage(`❌ ${data.message} || Login failed!`);
       }
     } catch (err) {
+      if(!navigator.onLine){
+        setLoading(false);
+        setMessage("🌐 Please connect to the internet.");
+      }
+      else {
+      setLoading(false);
+      setMessage("Something went wrong. Please try again.");
+    }
+      setLoading(false);
       console.log(err);
-      setMessage(err.message);
     }
   };
 
@@ -68,7 +89,7 @@ function Login() {
           />
 
           <br />
-          <p className="text-red-500">{message}</p>
+           {loading?<TextLoader text={message}/>:message}
           <br />
           <button
             type="submit"

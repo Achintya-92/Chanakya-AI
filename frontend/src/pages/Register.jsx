@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { API_URL } from "../config/api";
 import {useNavigate} from "react-router-dom"
+import TextLoader from "../component/common/TextLoader";
+
 function Register() {
     const [username,setUsername] =useState("");
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
     const [message,setMessage]=useState("");
+    const [loading,setLoading]=useState(false);
     const navigate = useNavigate();
     const handleSubmit = async (e) =>{
        e.preventDefault();
+       setLoading(true);
+       setMessage("wait");
       try{
       const response=await fetch(`${API_URL}/auth/register`,{
          method:"POST",
@@ -20,14 +25,23 @@ function Register() {
       console.log(data);
       if (response.ok) {
            localStorage.setItem("token", data.token); 
-           localStorage.setItem("userId",data.user.id)
            console.log(data.token);
+           setLoading(false);
         setMessage("Registered successfully!");
         navigate(`/creategoal`)
       } else {
+        setLoading(false);
         setMessage(`${data.message}`);
       }
     } catch (err) {
+     if(!navigator.onLine){
+        setLoading(false);
+        setMessage("🌐 Please connect to the internet.");
+      }
+      else {
+      setLoading(false);
+      setMessage("Something went wrong. Please try again.");
+      }
       console.log(err);
     }
   };
@@ -70,9 +84,9 @@ function Register() {
          className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500"
         type="password" name="password" id="password" onChange={(e)=>{setPassword(e.target.value)}}  />
 
-        <br />
-        <p className="text-red-500">{message}</p>
-        <br />
+          <br />
+           {loading?<TextLoader text={message}/>:message}
+          <br />
 
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg">Submit</button>
        </form>
