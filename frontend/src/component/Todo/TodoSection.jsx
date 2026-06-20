@@ -48,6 +48,16 @@ export default function TodoSection() {
     </>
   );
 }
+
+if (todo) {
+  const msg=message||"Loading Todos....";
+  return (
+    <>
+      <LoaderCard message={msg} />
+    </>
+  );
+}
+
   return (
     <div className="space-y-8">
       <InternalNavbar/>

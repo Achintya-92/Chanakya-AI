@@ -5,8 +5,8 @@ function TextLoader({text="Loding"}) {
 
     useEffect(()=>{
         const interval = setInterval(()=>{
-            setDots((prev)=>prev.length>=3?"":".");
-        },400);
+            setDots((prev)=>prev.length>=3? "":prev+".");
+        },500);
         return ()=> clearInterval(interval);
     })
     return ( 

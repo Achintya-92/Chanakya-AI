@@ -20,6 +20,7 @@ import Feedback from "./component/common/Feedback.jsx";
 import AccountPage from "./pages/AccountPage.jsx";
 import ChatSection from "./component/common/ChatSection.jsx";
 import  Loader  from "./component/common/Loader.jsx";
+import TextLoader from "./component/common/TextLoader.jsx";
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
       <Routes>
 
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<TextLoader />} />
 
         <Route
           path="/login"
