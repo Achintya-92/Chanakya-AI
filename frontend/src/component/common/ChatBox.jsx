@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config/api";
 import TextLoader from "./TextLoader";
 
@@ -7,6 +8,8 @@ function ChatBox({data,id}){
   const token=localStorage.getItem("token");
   const [loading,setLoading] = useState(false);
   const [message,setMessage] = useState("");
+  const navigate = useNavigate();
+
   const handleChat = async (e)=>{
     if(!chat){
       return(
@@ -27,17 +30,21 @@ function ChatBox({data,id}){
         });
         
         const result = await res.json();
-
+         console.log(result);
        if (!res.ok) {
+        setLoading(false);
         throw new Error(result.message || "Failed to send chat");
       }
+      setLoading(false);
     setMessage("Answer Generated!");
-    setChat("");
+     setChat("");
+     setMessage(" ");
+    navigate(`/chatpage/${result.chat._id}`);
       }
     catch(err){
       if (!navigator.onLine) {
-        setLoading(false);
         setMessage("🌐 Please connect to the internet.");
+
       } else {
         setLoading(false);
         setMessage(err.message || "Something went wrong. Please try again.");

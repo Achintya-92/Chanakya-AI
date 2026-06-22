@@ -115,9 +115,6 @@ const generateTomorrowAction = async () => {
       alert(data.message);
       return;
     }
-
-    alert("Tomorrow's Action Generated!");
-
     fetchTodayAction();
 
   } catch (err) {
