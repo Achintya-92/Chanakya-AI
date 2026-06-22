@@ -5,6 +5,8 @@ import authRoutes from "./routes/authRoutes.js";
 import goalRoutes from "./routes/goalRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import aiRoute from "./routes/aiRoutes.js";
+import actionRoutes from "./routes/actionRoutes.js";
+import motivationRoutes from "./routes/motivationRoutes.js";
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/goals", goalRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/ai/Chats",aiRoute);
+app.use("/api/actions",actionRoutes);
+app.use("/api/motivation",motivationRoutes);
 export default app;

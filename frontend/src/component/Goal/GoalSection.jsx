@@ -7,8 +7,8 @@ export default function GoalSection({
 {
 
   return (
-    <section className="mt-12">
-      <h2 className="text-2xl font-bold mb-6">
+    <section className="mt-4">
+      <h2 className="text-2xl font-bold mb-8 ml-2">
         {title}
       </h2>
 
@@ -19,10 +19,11 @@ export default function GoalSection({
         lg:grid-cols-3
         gap-6
       ">
-        {goals.map(goal => (
+        {goals.map((goal,index) => (
           <GoalCard
             key={goal._id}
             goal={goal}
+            index={index}
           /> 
         ))}
       </div>

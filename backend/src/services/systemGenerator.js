@@ -79,10 +79,11 @@ Before generating the system:
 
 OUTPUT FORMAT
 
-Return ONLY valid JSON.
+Return ONLY valid JSON
 
 Do NOT return:
 
+* important: Empty array and data field should remain Empty.
 * Markdown
 * HTML
 * Explanations
@@ -90,7 +91,6 @@ Do NOT return:
 * Comments
 * Code fences
 * Text before JSON
-* Text after JSON
 
 JSON SCHEMA
 
@@ -210,8 +210,6 @@ Every array must contain meaningful items.
 Return ONLY valid JSON matching the schema exactly.
 
 importent note:- Output must be parseable by JSON.parse().
-
-
              `
             }
         ]

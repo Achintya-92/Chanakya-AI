@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 export default function Loader({ message = "Loading" }) {
-const userId=localStorage.getItem("userId");
 const navigate=useNavigate();
   return (
     <div className="relative max-w-sm  mx-auto min-h-screen flex items-center justify-center">
@@ -9,7 +8,7 @@ const navigate=useNavigate();
         <div className="mt-4 text-lg font-medium">{message}</div>
         <div className="flex flex-wrap gap-16 p-4 mt-8 relative">
       <button onClick={(e)=>navigate(`/`)} className="bg-orange-500 p-4 rounded-xl px-6">Exit</button>
-      <button onClick={(e)=>navigate(`/creategoal/${userId}`)} className="bg-green-500 p-4 px-5 rounded-xl">Back</button>
+      <button onClick={(e)=>navigate(`/creategoal`)} className="bg-green-500 p-4 px-5 rounded-xl">Back</button>
       </div>
       </div>
     </div>

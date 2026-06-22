@@ -10,6 +10,7 @@ function GoalForm() {
      const [description,setDescription] = useState("")
      const [age,setAge] = useState(null)
      const [currentState,setState] = useState("")
+     const [fireLine,setFireLine] = useState("")
      const [availableTime,setAvailableTime] = useState("")
      const [message,setMessage]=useState("");
      const token = localStorage.getItem("token");
@@ -30,7 +31,7 @@ const handleSubmit = async (e)=>{
                          "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`
                             },
-                    body: JSON.stringify({title,goalType,description,age,currentState,availableTime}),
+                    body: JSON.stringify({title,goalType,description,age,fireLine,currentState,availableTime}),
                  });
            
                  const data = await response.json();
@@ -50,9 +51,9 @@ const handleSubmit = async (e)=>{
         
 
     return ( 
-  <div className="min-h-screen bg-slate-50">
+  <div className="min-h-screen mx-auto bg-slate-50">
 
-  <div className="max-w-7xl mx-auto px-4 py-10">
+  <div className="mb-[-200px] max-w-7xl mx-auto px-16 py-10 md:ml-64">
 
 {/* Form section */}
 <div className="grid lg:grid-cols-3 gap-8">
@@ -105,7 +106,14 @@ const handleSubmit = async (e)=>{
             <input
          className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500"
              type="text"  name="currentState" id="currentState" placeholder="Like i am in 12th.."  onChange={(e)=>{setState(e.target.value)}}></input>
-             <div >
+            
+            <div className="mt-2 mb-2">
+            <label className="block mb-l font-medium">Write your Fire Line.</label>
+            </div>
+            <input
+         className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-blue-500 mb-4"
+             type="text"  name="fireline" id="fireline" placeholder="Why you want to achieve. like i want go out from rat race.."  onChange={(e)=>{setFireline(e.target.value)}}></input>
+ <div >
                 <label className="block mb-l font-medium">How many time available!</label>
             </div>
             <input

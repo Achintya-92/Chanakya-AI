@@ -4,7 +4,6 @@ import InternalNavbar from "./InternalNavbar";
 import ChatBox from "./ChatBox";
 
 function ChatSection() {
-
     return ( <div>
         <InternalNavbar/>
         <div className="min-h-screen flex items-center justify-center">

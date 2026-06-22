@@ -22,13 +22,17 @@ function Register() {
       });
 
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
+  //            navigate("/verify-email", {
+  //   state: {
+  //     email,
+  //   },
+  // })
            localStorage.setItem("token", data.token); 
            console.log(data.token);
            setLoading(false);
         setMessage("Registered successfully!");
-        navigate(`/creategoal`)
+         navigate("/creategoal");
       } else {
         setLoading(false);
         setMessage(`${data.message}`);

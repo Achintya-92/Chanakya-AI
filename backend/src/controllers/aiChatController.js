@@ -3,11 +3,12 @@ import ChatService from "../services/ChatService.js";
 import Goal from "../models/Goal.js";
 
 export const  createChat=async (req,res)=>{
-   
- if(req.body.id){
+ if(!req.body.id){return;}
  const goal=await Goal.findById(req.body.id);
+ 
+ if(goal!==null){
  await ChatService({
-    userId:(goal.userId).toString(),
+    userId:(req.user._id).toString(),
     goalId:req.params.id,
     title:goal.title,
     goalType:goal.goalType,
@@ -20,7 +21,7 @@ export const  createChat=async (req,res)=>{
  })
 }else{
   await ChatService({
-    userId:req.body.userId,
+    userId:(req.body.user._id).toString(),
     chat:req.body.chat
  }) 
 }
@@ -30,7 +31,7 @@ export const  getChats=async(req,res)=>{
 try{
 
 const chats=await Chat.find({
-   userId:req.user._id
+   userId:(req.user._id).toString()
 });
 
 

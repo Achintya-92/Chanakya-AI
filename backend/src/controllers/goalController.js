@@ -17,6 +17,7 @@ export const createGoal = async (req, res) => {
       goalType,
       age,
       description,
+      fireLine,
       currentState,
       availableTime,
     } = req.body;
@@ -25,6 +26,7 @@ export const createGoal = async (req, res) => {
       goalType,
       description,
       age,
+      fireLine,
       currentState,
       availableTime,
     });
@@ -41,6 +43,7 @@ export const createGoal = async (req, res) => {
       goalType,
       description,
       age,
+      fireLine,
       currentState,
       availableTime,
       goalHash,
@@ -326,19 +329,18 @@ export const getGoalById = async (
   res
 ) => {
   try {
-    
-   const goal =
-      await Goal.findById(
+   const goal = await Goal.findById(
         req.params.id
       );
-      
-    if (!goal) {
+
+    if(!goal) {
       return res.status(404).json({
         success: false,
         message:
           "Goal not found",
       });
     }
+
 
     if (goal.userId.toString() !== req.user._id.toString()) {
     return res.status(403).json({
@@ -347,15 +349,9 @@ export const getGoalById = async (
     });
 }
 
-    const aiContent =
-      await AIContent.findOne({
-        goalHash:goal.goalHash,
-      });
-
-    res.status(200).json({
+  res.status(200).json({
       success: true,
       goal,
-      aiContent,
     });
 
   } catch (error) {
@@ -376,18 +372,9 @@ export const deleteGoal = async (
       await Goal.findById(
         req.params.id
       );
-
-    if (!(goal.length>0)) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Goal not found",
-      });
-    }
-
     // Ownership Check
     if (
-      goal[0].userId.toString()!==
+      goal.userId.toString()!==
       req.user._id.toString()
     ) {
       return res.status(403).json({
@@ -401,14 +388,35 @@ export const deleteGoal = async (
 
     res.status(200).json({
       success: true,
-      message:
-        "Goal deleted successfully 👍",
+      message:"Goal deleted successfully 👍",
     });
 
   } catch (error) {
+    console.log(error);
      return res.status(500).json({
       success: false,
       message: "Something Went wrong",
     });
   }
 };
+
+//update goal
+export const updateGoal=async (req,res)=>{
+    const id=req.params.id;
+    const userId=req.user._id;
+   const goal = await Goal.findOneAndUpdate(
+    {
+        _id:id,
+        userId:userId
+    },
+    req.body,
+    {
+        new: true
+    }
+);
+
+res.json({
+    success: true,
+    goal
+});
+}

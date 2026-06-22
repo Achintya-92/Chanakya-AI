@@ -28,6 +28,15 @@ function Login() {
       setMessage(data.message || "Login failed");
       return;
     }
+    
+//   if (response.status === 403) {
+//   navigate("/verify-email", {
+//     state: {
+//       email: data.email,
+//     },
+//   });
+//   return;
+// }
 
       if (response.ok) {
         localStorage.setItem("token", data.token);

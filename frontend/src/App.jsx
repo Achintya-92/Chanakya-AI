@@ -7,7 +7,6 @@ import {
 import Home from "./pages/Hero";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import About from "./pages/About";
@@ -20,7 +19,9 @@ import Feedback from "./component/common/Feedback.jsx";
 import AccountPage from "./pages/AccountPage.jsx";
 import ChatSection from "./component/common/ChatSection.jsx";
 import  Loader  from "./component/common/Loader.jsx";
-import TextLoader from "./component/common/TextLoader.jsx";
+import ActionPage from "./component/ActionSection/Action.jsx";
+import UpdateForm from "./component/Goal/UpdateForm.jsx";
+import VerifyEmail from "./pages/VerifyEmail.jsx";
 
 function App() {
   return (
@@ -28,11 +29,16 @@ function App() {
       <Routes>
 
         {/* Public Routes */}
-        <Route path="/" element={<TextLoader />} />
-
+        <Route path="/" element={<Home />} />
+         
         <Route
           path="/login"
           element={<Login />}
+        />
+        
+         <Route
+          path="/verify-email"
+          element={<VerifyEmail/>}
         />
 
         <Route
@@ -50,8 +56,17 @@ function App() {
           }
         />
 
+        <Route
+          path="/update/:id"
+          element={
+            <ProtectedRoute>
+              <UpdateForm />
+            </ProtectedRoute>
+          }
+        />
+
          <Route
-          path="/chatSection/:id"
+          path="/chatSection"
           element={
             <ProtectedRoute>
               <ChatSection />
@@ -69,7 +84,7 @@ function App() {
         />
 
                 <Route
-          path="/accountPage/:id"
+          path="/accountPage"
           element={
             <ProtectedRoute>
               <AccountPage />
@@ -78,7 +93,7 @@ function App() {
         />
 
         <Route
-          path="/feedback/:id"
+          path="/feedback"
           element={
             <ProtectedRoute>
               <Feedback />
@@ -109,17 +124,17 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-         <Route path="/about" element={<About />} />
-
-        <Route
-          path="/chat/:goalId"
+        
+         <Route
+          path="/action/:id"
           element={
             <ProtectedRoute>
-              <Chat />
+              <ActionPage/>
             </ProtectedRoute>
           }
         />
+
+         <Route path="/about" element={<About />} />
 
         {/* 404 */}
         <Route

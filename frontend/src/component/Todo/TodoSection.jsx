@@ -29,6 +29,8 @@ export default function TodoSection() {
 
     const data = await response.json();
     setTodo(data?.todos?.[0]?.todo);
+  localStorage.setItem("todo",true);
+
   } catch (err) {
     console.log(err);
   } finally {
@@ -40,17 +42,9 @@ export default function TodoSection() {
   fetchTodo();
   },[id])
   console.log(todo);
- if (loading) {
-  const msg=message||"Loading Todos....";
-  return (
-    <>
-      <LoaderCard message={msg} />
-    </>
-  );
-}
 
-if (todo) {
-  const msg=message||"Loading Todos....";
+ if (loading) {
+  const msg=message||"Loading Todos";
   return (
     <>
       <LoaderCard message={msg} />

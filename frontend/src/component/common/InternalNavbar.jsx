@@ -15,9 +15,9 @@ function InternalNavbar() {
       <h1 className="text-indigo-600 p-4 text-xl font-bold" >Chanakya AI</h1>
        <ul className="flex gap-6 items-center">
         <li><a href="/">Home</a></li>
-        <li onClick={() => setToggle(false)}><a href={`/chatSection/${userId}`} label="Chanakya ai you goal mentor.">Chanakya</a></li>
+        <li onClick={() => setToggle(false)}><a href={`/chatSection`} label="Chanakya ai you goal mentor.">Chanakya</a></li>
         <li onClick={() => setToggle(false)}><a href={`/creategoal`} label="Chanakya ai you goal mentor">New Goal</a></li>
-        {/* <li><a href={`/feedback/${userId}`}>Feedback</a></li> */}
+        <li><a href={`/feedback`}>Feedback</a></li>
          {/* <li className="flex flex-wrap border rounded-3xl text-sm px-2 py gap-2"><a href={`/accountPage/${userId}`}>You</a><img src="usericon.jpg" alt="" className="rounded-full cover" /></li> */}
        </ul>
       </nav>

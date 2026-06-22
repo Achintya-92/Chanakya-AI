@@ -4,7 +4,7 @@ function AccountPage() {
     const {id}=useParams();
     return ( 
         <div>
-
+             
         </div>
      );
 }

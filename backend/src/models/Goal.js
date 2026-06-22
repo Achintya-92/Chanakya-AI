@@ -31,10 +31,14 @@ const goalSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-
     age: {
       type: Number,
       required: true,
+    },
+
+     fireLine: {
+      type: String,
+      default:"I want to become rich."
     },
 
     currentState: {

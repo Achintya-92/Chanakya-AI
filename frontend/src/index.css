@@ -26,3 +26,51 @@ nav h1{
     font-size: 20px;
     font-weight:bold;
 }
+
+    #ratingBody{
+      font-family: Arial, sans-serif;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+
+    .rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+    }
+
+    .star-button {
+      font-size: 50px;
+      color: #ccc;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .star-button:hover,
+    .star-button:hover ~ .star-button {
+      color: gold;
+    }
+
+    .star-button.selected,
+    .star-button.selected ~ .star-button {
+      color: gold;
+    }
+
+    .star-button.permanent-selected {
+      color: gold !important;
+    }
+
+    
+    .lis-item {
+      color: green;
+      margin-bottom: 10px; 
+    }
+    .de{
+      padding:5px;
+    }

@@ -33,6 +33,7 @@ const { id } = useParams();
  const raw = data.system[0].system;
 console.log(raw);
 setSystem(raw);
+localStorage.setItem("system",true);
     }
     catch(err){
       setMessage(err)
@@ -52,8 +53,7 @@ if (loaded) {
 }
 
 
-  console.log(data.accountabilitySystem
-);
+  console.log(data);
   return (
     <div className="space-y-8">
       <InternalNavbar/>

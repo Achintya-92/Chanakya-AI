@@ -51,6 +51,15 @@ console.log(data?.roadmap?.[0]?.roadmap[0]);
     );
   }
 
+    if (!(roadmap.length>0)) {
+    const msg=message||"Loading Roadmap.";
+    return (
+      <>
+        <LoaderCard message={msg} />
+      </>
+    );
+  }
+
 function RiskManagementSection({
   risks,
 }) {
