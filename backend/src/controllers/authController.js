@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { body, validationResult } from "express-validator";
 
 // Register User
 export const register = async (req, res) => {
@@ -84,15 +85,15 @@ export const login = async (req, res) => {
     }
 
     // Email verification check
-    if (!user.isVerified) {
-      return res.status(403).json({
-        success: false,
-        message: "Please verify your email first.",
-        email: user.email,
-      });
-    }
+    // if (!user.isVerified) {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: "Please verify your email first.",
+    //     email: user.email,
+    //   });
+    // }
 
-    const token = generateToken(user._id);
+    // const token = generateToken(user._id);
 
     res.status(200).json({
       success: true,

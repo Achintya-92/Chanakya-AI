@@ -1,36 +1,36 @@
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 
-import { Resend } from "resend";
-import User from "../models/User.js";
+// import { Resend } from "resend";
+// import User from "../models/User.js";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const emailSend = async (req, res) => {
-  try {
-    const { email } = req.body;
-    console.log(email);
+// export const emailSend = async (req, res) => {
+//   try {
+//     const { email } = req.body;
+//     console.log(email);
 
-    const response = await resend.emails.send({
-      from: "onboarding@resend.dev", // Use this for testing
-      to: email,
-      subject: "Verify Email",
-      html: "<h1>Your OTP is 493821</h1>",
-    });
+//     const response = await resend.emails.send({
+//       from: "onboarding@resend.dev", // Use this for testing
+//       to: email,
+//       subject: "Verify Email",
+//       html: "<h1>Your OTP is 493821</h1>",
+//     });
 
-    return res.status(200).json({
-      success: true,
-      response,
-    });
-  } catch (error) {
-    console.error(error);
+//     return res.status(200).json({
+//       success: true,
+//       response,
+//     });
+//   } catch (error) {
+//     console.error(error);
 
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 export const verifyOTP = async(req,res)=>{
    const {email,otp} = req.body;
