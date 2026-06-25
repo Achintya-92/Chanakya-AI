@@ -51,9 +51,9 @@ const handleSubmit = async (e)=>{
         
 
     return ( 
-  <div className="min-h-screen mx-auto bg-slate-50">
+  <div className="min-h-screen mx-auto bg-slate-50 mb-12">
 
-  <div className="mb-[-200px] max-w-7xl mx-auto px-16 py-10 md:ml-64">
+  <div className="max-w-7xl mx-auto px-16 py-10 md:ml-64">
 
 {/* Form section */}
 <div className="grid lg:grid-cols-3 gap-8">

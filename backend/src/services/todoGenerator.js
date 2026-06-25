@@ -10,9 +10,10 @@ export default async function TodoGenerator({
       currentState,
       availableTime}){
 
+let res;
 const apiKey = process.env.OPENROUTER_API_KEY;
     try{
- const res =await fetch(`https://openrouter.ai/api/v1/chat/completions`,
+  res=await fetch(`https://openrouter.ai/api/v1/chat/completions`,
         {
         method: "POST",
 
@@ -202,9 +203,12 @@ Return ONLY valid JSON matching the schema exactly.
         })                            
      })
 
+     if(!res.ok){
+      console.log("check your internet!");
+     }
 const data = await res.json();
  if(!data){
-    res.send({message:"Chek Internet Connectivity"})
+    console.log("Chek Internet Connectivity");
    }
 
 const content = data.choices?.[0]?.message?.content;
@@ -234,22 +238,6 @@ try {
   console.log("Invalid JSON:");
 }
 } catch (err) {
-   if (
-    err.cause?.code === "UND_ERR_CONNECT_TIMEOUT" ||
-    err.cause?.code === "UND_ERR_HEADERS_TIMEOUT" ||
-    err.cause?.code === "UND_ERR_SOCKET" ||
-    err.cause?.code === "ENOTFOUND" ||
-    err.cause?.code === "ECONNREFUSED"
-  ) {
-    return res.status(503).json({
-      success: false,
-      message: "Unable to connect to the AI service. Please check your internet connection or try again later.",
-    });
-  }else{
-   return res.status(500).json({
-    success: false,
-    message: "Internal Server Error",
-  });
-  }
+   console.log(err);
 }
 }

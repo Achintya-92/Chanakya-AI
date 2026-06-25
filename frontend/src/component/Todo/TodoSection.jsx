@@ -17,6 +17,9 @@ export default function TodoSection() {
   const [message,setMessage]=useState("");
 
   const fetchTodo = async () => {
+     if(!navigator.onLine){
+      setMessage("Check your Internet Connectivity!");
+    }else{
   try {
     const response = await fetch(
       `${API_URL}/goals/todo/${id}`,
@@ -26,16 +29,20 @@ export default function TodoSection() {
         },
       }
     );
-
+if(!response.ok){
+  setMessage("Somthing went wrong!");
+}
     const data = await response.json();
     setTodo(data?.todos?.[0]?.todo);
   localStorage.setItem("todo",true);
 
   } catch (err) {
+      setMessage("Some thing went Wrong!");
     console.log(err);
   } finally {
     setLoading(false);
   }
+}
 };
 
   useEffect(()=>{
@@ -47,7 +54,7 @@ export default function TodoSection() {
   const msg=message||"Loading Todos";
   return (
     <>
-      <LoaderCard message={msg} />
+  {    <LoaderCard message={msg} />|| message}
     </>
   );
 }

@@ -11,9 +11,10 @@ export default async function SystemGenerator({
       availableTime,}){
 
 const apiKey = process.env.OPENROUTER_API_KEY;
+let res;
 console.log(apiKey);
     try{
- const res =await fetch(`https://openrouter.ai/api/v1/chat/completions`,
+  res =await fetch(`https://openrouter.ai/api/v1/chat/completions`,
         {
         method: "POST",
 
@@ -25,7 +26,7 @@ console.log(apiKey);
       type: "json_object"
 },
         body: JSON.stringify({
-        model : "openRouter/free",
+        model : "deepseek/deepseek-chat",
 
         messages: [
             {
@@ -215,7 +216,15 @@ importent note:- Output must be parseable by JSON.parse().
         ]
         })
      })
+     if(!res.ok){
+      console.log("check your internet!");
+     }
 const data = await res.json();
+
+ if(!data){
+    console.log("Chek Internet Connectivity");
+   }
+
 const content = data.choices?.[0]?.message?.content;
 const cleaned = content
   .replace(/```json|```/g, "")
@@ -237,22 +246,6 @@ try {
     system:parsed
   });
     }catch (err) {
-   if (
-    err.cause?.code === "UND_ERR_CONNECT_TIMEOUT" ||
-    err.cause?.code === "UND_ERR_HEADERS_TIMEOUT" ||
-    err.cause?.code === "UND_ERR_SOCKET" ||
-    err.cause?.code === "ENOTFOUND" ||
-    err.cause?.code === "ECONNREFUSED"
-  ) {
-    return res.status(503).json({
-      success: false,
-      message: "Unable to connect to the AI service. Please check your internet connection or try again later.",
-    });
-  }else{
-   return res.status(500).json({
-    success: false,
-    message: err,
-  });
-  }
+  console.log(err);
 }
 }

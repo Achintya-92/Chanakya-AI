@@ -16,6 +16,10 @@ export default function RoadmapSection()
  const [loaded,setLoaded] =useState(true); 
    
   const fetchRoadmap = async () => {
+     if(!navigator.onLine){
+      setLoaded(false);
+      setMessage("Check your Internet Connectivity!");
+    }else{
     try {
       const response = await fetch(
         `${API_URL}/goals/roadmap/${id}`,
@@ -24,8 +28,12 @@ export default function RoadmapSection()
             Authorization: `Bearer ${token}`,
           },
         }
-      ),
-  data = await response.json();
+      );
+        if(!response.ok){
+  setMessage("Somthing went wrong!");
+  return;
+}
+ const data = await response.json();
   console.log(data);
 console.log(data?.roadmap?.[0]?.roadmap[0]);
   setRoadmap(data?.roadmap[0]?.roadmap[0]);
@@ -37,6 +45,7 @@ console.log(data?.roadmap?.[0]?.roadmap[0]);
       setLoaded(false);
     }
   }
+  }
 
   useEffect(()=>{
   fetchRoadmap();
@@ -46,12 +55,12 @@ console.log(data?.roadmap?.[0]?.roadmap[0]);
     const msg=message||"Loading Roadmap.";
     return (
       <>
-        <LoaderCard message={msg} />
+    {    <LoaderCard message={msg} />|| message};
       </>
     );
   }
 
-    if (!(roadmap.length>0)) {
+    if (!roadmap) {
     const msg=message||"Loading Roadmap.";
     return (
       <>

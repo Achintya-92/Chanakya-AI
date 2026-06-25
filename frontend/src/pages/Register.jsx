@@ -70,7 +70,7 @@ function Register() {
          type="text"
           name="username" 
           id="username"
-           onChange={(e)=>{setUsername(e.target.value)}} />
+           onChange={(e)=>{setUsername(e.target.value)}} required/>
          <div>
           <label className="block mb-l font-medium">
             Email

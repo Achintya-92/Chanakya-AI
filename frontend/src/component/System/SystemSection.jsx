@@ -18,6 +18,11 @@ const { id } = useParams();
   const [loaded,setLoaded] = useState(true);
 
    const fetchSystem = async () => {
+    setMessage("Creating System");
+    if(!navigator.onLine){
+        setLoaded(false);
+      setMessage("Check your Internet Connectivity!");
+    }else{
     try {
       const response = await fetch(
         `${API_URL}/goals/system/${id}`,
@@ -27,7 +32,9 @@ const { id } = useParams();
           },
         }
       );
-
+if(!response.ok){
+  setMessage("Somthing went wrong!");
+}
  const data = await response.json();
  console.log(data);
  const raw = data.system[0].system;
@@ -36,11 +43,12 @@ setSystem(raw);
 localStorage.setItem("system",true);
     }
     catch(err){
-      setMessage(err)
+      setMessage("Some thing went Wrong!");
       console.log(err);
     } finally{
     setLoaded(false);
   }
+}
 }
     useEffect(()=>{
     fetchSystem();
@@ -48,7 +56,7 @@ localStorage.setItem("system",true);
 
 if (loaded) {
   return( <>  
-<Loader message={message}/>
+{<Loader message={message}/>|| message}
   </>)
 }
 

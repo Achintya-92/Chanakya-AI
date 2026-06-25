@@ -177,6 +177,7 @@ Return ONLY valid JSON`;
 }
 
 const apiKey = process.env.OPENROUTER_API_KEY;
+console.log(apiKey)
     try{
  const res =await fetch(`https://openrouter.ai/api/v1/chat/completions`,
         {
