@@ -11,6 +11,9 @@ function Register() {
     const [loading,setLoading]=useState(false);
     const navigate = useNavigate();
     const handleSubmit = async (e) =>{
+           if(!navigator.onLine){
+        setMessage("🌐 Please connect to the internet.");
+      }
        e.preventDefault();
        setLoading(true);
        setMessage("wait");
@@ -26,26 +29,24 @@ function Register() {
   //            navigate("/verify-email", {
   //   state: {
   //     email,
-  //   },
+  //   }, 
   // })
-           localStorage.setItem("token", data.token); 
-           console.log(data.token);
-           setLoading(false);
+  console.log(data.token);
+      localStorage.setItem("token", data.token); 
+      setLoading(false);
         setMessage("Registered successfully!");
          navigate("/creategoal");
       } else {
-        setLoading(false);
         setMessage(`${data.message}`);
       }
     } catch (err) {
      if(!navigator.onLine){
-        setLoading(false);
         setMessage("🌐 Please connect to the internet.");
       }
       else {
-      setLoading(false);
       setMessage("Something went wrong. Please try again.");
       }
+            setLoading(false);
       console.log(err);
     }
   };

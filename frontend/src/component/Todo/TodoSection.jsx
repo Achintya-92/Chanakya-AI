@@ -19,6 +19,7 @@ export default function TodoSection() {
   const fetchTodo = async () => {
      if(!navigator.onLine){
       setMessage("Check your Internet Connectivity!");
+      return;
     }else{
   try {
     const response = await fetch(

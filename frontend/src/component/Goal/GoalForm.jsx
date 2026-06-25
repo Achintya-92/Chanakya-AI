@@ -20,6 +20,10 @@ function GoalForm() {
 const [Loading,setLoading] = useState(false);
 
 const handleSubmit = async (e)=>{
+       if(!navigator.onLine){
+        setMessage("🌐 Please connect to the internet.");
+        return;
+      }
                 e.preventDefault();
                 setLoading(true);
                 setMessage("wait");
@@ -42,6 +46,9 @@ const handleSubmit = async (e)=>{
                    setMessage(`❌ ${data.message}`);
                  }
                } catch (err) {
+                     if(!navigator.onLine){
+        setMessage("🌐 Please connect to the internet.");
+      }
                  console.log(err);
                   setLoading(false);
                    setMessage(err.message);

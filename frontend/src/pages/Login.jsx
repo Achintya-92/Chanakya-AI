@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
 import TextLoader from "../component/common/TextLoader";
+import { Link } from "react-router-dom";
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,58 +12,50 @@ function Login() {
   const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("submitting");
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      const data = await response.json();
-      // console.log(response);
-      if (!response.ok) {
-        setLoading(false);
-      setMessage(data.message || "Login failed");
+  if (!navigator.onLine) {
+    setMessage("🌐 Please connect to the internet.");
+    return;
+  }
+
+  setLoading(true);
+  setMessage("Submitting...");
+
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.message || "Login failed!");
+      setLoading(false);
       return;
     }
-    
-//   if (response.status === 403) {
-//   navigate("/verify-email", {
-//     state: {
-//       email: data.email,
-//     },
-//   });
-//   return;
-// }
 
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        setLoading(false);
-        setMessage("✅ Logged in successfully!");
-        const token = localStorage.getItem("token");
-        localStorage.setItem("userId",data.user.id);
-        navigate(`/creategoal`)
-      } else {
-        setLoading(false);
-        setMessage(`❌ ${data.message} || Login failed!`);
-      }
-    } catch (err) {
-      if(!navigator.onLine){
-        setLoading(false);
-        setMessage("🌐 Please connect to the internet.");
-      }
-      else {
-      setLoading(false);
-      setMessage("Something went wrong. Please try again.");
-    }
-      setLoading(false);
-      console.log(err);
-    }
-  };
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("userId", data.user.id);
+
+    setMessage("✅ Logged in successfully!");
+    setLoading(false);
+
+    navigate("/creategoal");
+  } catch (err) {
+    setMessage(
+      !navigator.onLine
+        ? "🌐 Please connect to the internet."
+        : "Something went wrong. Please try again."
+    );
+
+    setLoading(false);
+    console.log(err);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -110,9 +104,9 @@ function Login() {
 
         <p className="text-center mt-4 text-gray-600">
           if you have no account?
-          <a href="/register" className="text-blue-500 ml-1 font-medium">
-            Register
-          </a>
+<Link to="/register" className="text-blue-500 ml-1 font-medium">
+  Register
+</Link>
         </p>
       </div>
     </div>

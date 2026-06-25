@@ -39,6 +39,7 @@ const user = await User.create({
       }
     );
 
+    console.log(token);
 res.status(201).json({
   success: true,
   message: "User registered successfully",
@@ -69,9 +70,9 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Please Sign In first.",
       });
     }
 
@@ -84,24 +85,30 @@ export const login = async (req, res) => {
       });
     }
 
-    // Email verification check
-    // if (!user.isVerified) {
-    //   return res.status(403).json({
-    //     success: false,
-    //     message: "Please verify your email first.",
-    //     email: user.email,
-    //   });
-    // }
-
-    // const token = generateToken(user._id);
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.status(200).json({
       success: true,
       token,
       message: "Login successful",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
     });
 
   } catch (err) {
+    console.log(err);
+
     res.status(500).json({
       success: false,
       message: err.message,
